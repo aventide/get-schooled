@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import {useState, useEffect } from 'react';
+import { shuffle, take } from 'lodash';
 
 // https://www.svgrepo.com/
 
 import Tile from './components/Tile';
 import BankTile from './components/BankTile';
+import {COLORS, ANIMALS} from './constants';
 
 function generateInitialBoard() {
 
@@ -23,28 +25,37 @@ function generateInitialBoard() {
   return board;
 }
 
+function generateTileSet(){
+  const tileSet = {};
+  let counter = 0;
+
+  COLORS.forEach(color => {
+    ANIMALS.forEach(animal => {
+      tileSet[counter] = {
+        animal,
+        color,
+        id: counter
+      };
+      counter++;
+    })
+  })
+  return tileSet;
+}
+
 function App() {
 
   const [board, setBoard] = useState(generateInitialBoard());
-  const [bank, setBank] = useState();
-  const [availableBank, setAvailableBank] = useState([
-    {
-      animal: "crab",
-      color: "red"
-    },
-    {
-      animal: "crab",
-      color: "purple"
-    },
-    {
-      animal: "jellyfish",
-      color: "red"
-    },
-    {
-      animal: "crab",
-      color: "purple"
-    }
-  ]);
+
+  // the entire set of tiles. 36 of them.
+  // generate by fitting every animal/color combo, and setting a unique id
+  const [tileSet, setTileSet] = useState(generateTileSet());
+  const [bank, setBank] = useState(shuffle(Object.values(tileSet)));
+
+  const [availableBank, setAvailableBank] = useState([]);
+
+  useEffect(() => {
+    setAvailableBank(take(bank, 6))
+  }, [bank])
 
   return (
     <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
@@ -57,13 +68,10 @@ function App() {
       </div>
 
       <div className="mt-12 flex flex-row justify-evenly items-center w-full px-10">
-        <div className="w-3/5 md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1">
-          <BankTile animal="crab"/>
-          <BankTile animal="jellyfish" />
-          <BankTile animal="jellyfish" />
-          <BankTile animal="crab"/>
-          <BankTile animal="crab"/>
-          <BankTile animal="crab"/>
+        <div className="w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1">
+          {
+            availableBank.map((abItem) => <BankTile animal={abItem.animal} color={abItem.color} />)
+          }
         </div>
       </div>
 
