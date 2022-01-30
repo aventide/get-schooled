@@ -9,5 +9,9 @@ export const COLORS = [
 
 export const ANIMALS = [
     "crab",
-    "jellyfish"
+    "jellyfish",
+    "seahorse",
+    "starfish",
+    "turtle",
+    "fish"
 ]

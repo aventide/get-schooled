@@ -61,7 +61,7 @@ function App() {
 
   function handlePlaceTile(id) {
     
-    const newBoard = JSON.parse(JSON.stringify(board));
+    const newBoard = board;
     
     // addressed column-first
     newBoard[placementTarget.y][placementTarget.x].occupyingTile = id;
@@ -74,7 +74,7 @@ function App() {
     <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
       <div className="w-4/5 md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1">
         {
-          board.flat().map(boardTile => <div className="group bg-blue-200 hover:bg-red-400 hover:text-white aspect-square" onClick={() => setPlacementTarget({x: boardTile.x, y: boardTile.y})}>{
+          board.flat().map(boardTile => <div className={`group bg-blue-200 hover:bg-red-400 ${boardTile.x === placementTarget.x && boardTile.y === placementTarget.y ? 'bg-red-200' : ''} hover:text-white aspect-square`} onClick={() => setPlacementTarget({x: boardTile.x, y: boardTile.y})}>{
             (boardTile.occupyingTile || boardTile.occupyingTile === 0) && <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color}/>
           }</div>)
         }
