@@ -12,6 +12,8 @@ function Turtle({
       version="1.1"
       viewBox="0 0 45.959 45.959"
       xmlSpace="preserve"
+      width="200"
+      height="200"
     >
       <path
         fill={color}

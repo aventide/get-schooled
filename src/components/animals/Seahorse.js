@@ -12,6 +12,8 @@ function Seahorse({
       version="1.1"
       viewBox="0 0 512 512"
       xmlSpace="preserve"
+      width="200"
+      height="200"
     >
       <path
         fill={color}

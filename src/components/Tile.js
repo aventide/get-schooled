@@ -11,7 +11,7 @@ export default function BankTile({
     onSelect
 }) {
 
-    return (<div onClick={onSelect} className="aspect-square bg-blue-800 m-1 border-blue-800 rounded-md border-2 flex justify-center items-center p-2">
+    return (<div onClick={onSelect} className="aspect-square bg-blue-800 m-1 border-blue-800 rounded-md border-2 flex justify-center items-center p-2 overflow-hidden">
         {animal === "crab" && <Crab color={color} />}
         {animal === "jellyfish" && <Jellyfish color={color} />}
         {animal === "seahorse" && <Seahorse color={color} />}
