@@ -44,10 +44,7 @@ function generateTileSet() {
 function App() {
 
   const [board, setBoard] = useState(generateInitialBoard());
-  const [placementTarget, setPlacementTarget] = useState({
-    x: 0,
-    y: 0
-  });
+  const [targetTile, setTargetTile] = useState(null);
 
   // the entire set of tiles. 36 of them.
   // generate by fitting every animal/color combo, and setting a unique id
@@ -59,22 +56,24 @@ function App() {
     setAvailableBank(take(bank, 6))
   }, [bank])
 
-  function handlePlaceTile(id) {
-    
-    const newBoard = board;
-    
-    // addressed column-first
-    newBoard[placementTarget.y][placementTarget.x].occupyingTile = id;
+  function handleSelectTile(x, y) {
+    if(targetTile || targetTile === 0){
+      const newBoard = board;
 
-    setBoard(newBoard);
-    setBank(bank.filter(item => item.id !== id))
+      // addressed column-first
+      newBoard[y][x]['occupyingTile'] = targetTile;
+
+      setTargetTile(null);
+      setBoard(newBoard);
+      setBank(bank.filter(item => item.id !== targetTile))
+    }
   }
 
   return (
     <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
       <div className="w-4/5 md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1">
         {
-          board.flat().map(boardTile => <div className={`group bg-blue-200 hover:bg-red-400 ${boardTile.x === placementTarget.x && boardTile.y === placementTarget.y ? 'bg-red-200' : ''} hover:text-white aspect-square`} onClick={() => setPlacementTarget({x: boardTile.x, y: boardTile.y})}>{
+          board.flat().map(boardTile => <div className={`group bg-blue-200 hover:bg-red-400 hover:text-white aspect-square`} onClick={() => handleSelectTile(boardTile.x, boardTile.y)}>{
             (boardTile.occupyingTile || boardTile.occupyingTile === 0) && <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color}/>
           }</div>)
         }
@@ -83,11 +82,14 @@ function App() {
       <div className="mt-12 flex flex-row justify-evenly items-center w-full px-10">
         {availableBank.length > 0 && <div className="w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1">
           {
-            availableBank.map((abItem) => <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => handlePlaceTile(abItem.id)} />)
+            availableBank.map((abItem) => (
+              <div className={(targetTile || targetTile === 0) && abItem.id !== targetTile ? "opacity-25" : ""}>
+                <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => setTargetTile(abItem.id)} />
+              </div>
+            ))
           }
         </div>}
       </div>
-
 
     </div>
   );
