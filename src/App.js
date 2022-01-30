@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { shuffle, take } from 'lodash';
 
+import { getLegalMoveSpots } from './util';
+
 // https://www.svgrepo.com/
 
 import Tile from './components/Tile';
@@ -56,10 +58,6 @@ function App() {
     setAvailableBank(take(bank, 6))
   }, [bank])
 
-  // we may need to know later if the whole board is occupied
-  // to determine endGame state
-  // const isEverySpotOccupied = board.flat().every(item => item.occupyingTile);
-
   function handlePlaceTile(x, y) {
 
     // addressed column-first
@@ -92,10 +90,16 @@ function App() {
     if (targetTile === id) {
       setTargetTile(null);
     } else {
+
+      // only calculate legalMoves if we're doing a MOVE. On the board.
+      // isMoving? instead of this bullshit here
+      const boardTargetTile = board.flat().find(item => item.occupyingTile === id);
+      if (boardTargetTile) {
+        getLegalMoveSpots(board, boardTargetTile)
+      }
       setTargetTile(id);
     }
 
-    // const boardTargetTile = board.flat().find(item => item.occupyingTile === id);
   }
 
   return (
