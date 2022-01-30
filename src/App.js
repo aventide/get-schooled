@@ -26,7 +26,7 @@ function generateInitialBoard() {
 
 function generateTileSet() {
   const tileSet = {};
-  let counter = 0;
+  let counter = 1;
 
   COLORS.forEach(color => {
     ANIMALS.forEach(animal => {
@@ -56,9 +56,26 @@ function App() {
     setAvailableBank(take(bank, 6))
   }, [bank])
 
-  function handleSelectTile(x, y) {
-    if(targetTile || targetTile === 0){
+  // we may need to know later if the whole board is occupied
+  // to determine endGame state
+  // const isEverySpotOccupied = board.flat().every(item => item.occupyingTile);
+
+  function handlePlaceTile(x, y) {
+
+    // addressed column-first
+    const spotToPlace = board[y][x];
+    const isSpotOccupied = spotToPlace['occupyingTile'];
+
+    // before we do any deletion or adding, make sure we have a tile to place, and it's
+    // going in a legal spot
+    if (targetTile && !isSpotOccupied) {
       const newBoard = board;
+
+      // delete any duplicates of tiles, i.e. in a tile move
+      const alreadyPlacedTargetTile = newBoard.flat().find(item => item.occupyingTile === targetTile);
+      if (alreadyPlacedTargetTile) {
+        alreadyPlacedTargetTile.occupyingTile = null;
+      }
 
       // addressed column-first
       newBoard[y][x]['occupyingTile'] = targetTile;
@@ -69,12 +86,29 @@ function App() {
     }
   }
 
+  function handleSelectTile(id) {
+
+    // cancel tile selection if target re-selected
+    if (targetTile === id) {
+      setTargetTile(null);
+    } else {
+      setTargetTile(id);
+    }
+
+    // const boardTargetTile = board.flat().find(item => item.occupyingTile === id);
+  }
+
   return (
     <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
       <div className="w-4/5 md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1">
         {
-          board.flat().map(boardTile => <div className={`group bg-blue-200 hover:bg-red-400 hover:text-white aspect-square`} onClick={() => handleSelectTile(boardTile.x, boardTile.y)}>{
-            (boardTile.occupyingTile || boardTile.occupyingTile === 0) && <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color}/>
+          board.flat().map(boardTile => <div className={`group bg-blue-200 hover:bg-red-400 hover:text-white aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
+            boardTile.occupyingTile &&
+            (
+              <div className={boardTile.occupyingTile !== targetTile ? "" : "opacity-25"}>
+                <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectTile(boardTile.occupyingTile)} />
+              </div>
+            )
           }</div>)
         }
       </div>
@@ -83,8 +117,8 @@ function App() {
         {availableBank.length > 0 && <div className="w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1">
           {
             availableBank.map((abItem) => (
-              <div className={(targetTile || targetTile === 0) && abItem.id !== targetTile ? "opacity-25" : ""}>
-                <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => setTargetTile(abItem.id)} />
+              <div className={targetTile ? abItem.id !== targetTile ? "" : "opacity-25" : ""}>
+                <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => handleSelectTile(abItem.id)} />
               </div>
             ))
           }
