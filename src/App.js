@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { shuffle, take } from 'lodash';
 
-import { getLegalMoveSpots } from './util';
+import { getLegalMoveSpots, calculateColorScore } from './util';
 
 // https://www.svgrepo.com/
 
@@ -47,15 +47,25 @@ function App() {
 
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
+  const [isMoving, setIsMoving] = useState(false);
 
   // the entire set of tiles. 36 of them.
   // generate by fitting every animal/color combo, and setting a unique id
   const [tileSet, setTileSet] = useState(generateTileSet());
   const [bank, setBank] = useState(shuffle(Object.values(tileSet)));
   const [availableBank, setAvailableBank] = useState([]);
+  const [legalMoveSpots, setLegalMoveSpots] = useState([]);
 
   useEffect(() => {
     setAvailableBank(take(bank, 6))
+    console.log(
+      calculateColorScore(tileSet, board)
+    );
+    if(bank.length === 0){
+      console.log(
+        calculateColorScore(tileSet, board)
+      );
+    }
   }, [bank])
 
   function handlePlaceTile(x, y) {
@@ -63,10 +73,16 @@ function App() {
     // addressed column-first
     const spotToPlace = board[y][x];
     const isSpotOccupied = spotToPlace['occupyingTile'];
+    const isLegalMove = legalMoveSpots.some(spot => spot.x === x && spot.y === y)
 
     // before we do any deletion or adding, make sure we have a tile to place, and it's
     // going in a legal spot
-    if (targetTile && !isSpotOccupied) {
+
+    // if we ARE moving, make sure it's being done legally
+    const isDoingLegalMove = !isMoving || isLegalMove;
+
+    // new tile placement
+    if (targetTile && !isSpotOccupied && isDoingLegalMove) {
       const newBoard = board;
 
       // delete any duplicates of tiles, i.e. in a tile move
@@ -81,21 +97,28 @@ function App() {
       setTargetTile(null);
       setBoard(newBoard);
       setBank(bank.filter(item => item.id !== targetTile))
+      setIsMoving(false);
+      setLegalMoveSpots([])
     }
   }
 
   function handleSelectTile(id) {
 
+    setIsMoving(false);
+    setLegalMoveSpots([]);
+
     // cancel tile selection if target re-selected
     if (targetTile === id) {
       setTargetTile(null);
+      setIsMoving(false);
+      setLegalMoveSpots([]);
     } else {
 
-      // only calculate legalMoves if we're doing a MOVE. On the board.
-      // isMoving? instead of this bullshit here
+      // only calculate legalMoves if we're doing a MOVE on the board
       const boardTargetTile = board.flat().find(item => item.occupyingTile === id);
       if (boardTargetTile) {
-        getLegalMoveSpots(board, boardTargetTile)
+        setIsMoving(true)
+        setLegalMoveSpots(getLegalMoveSpots(board, boardTargetTile))
       }
       setTargetTile(id);
     }
@@ -106,14 +129,18 @@ function App() {
     <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
       <div className="w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1">
         {
-          board.flat().map(boardTile => <div className={`group bg-blue-200 hover:bg-red-400 hover:text-white aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
-            boardTile.occupyingTile &&
-            (
-              <div className={boardTile.occupyingTile !== targetTile ? "" : "opacity-25"}>
-                <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectTile(boardTile.occupyingTile)} />
-              </div>
-            )
-          }</div>)
+          board.flat().map(boardTile => {
+            const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y)
+            return <div className={`group ${isLegalMoveTile ? 'bg-blue-400' : 'bg-blue-200'} hover:bg-red-400 hover:text-white aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
+              boardTile.occupyingTile &&
+              (
+                <div className={boardTile.occupyingTile !== targetTile ? "" : "opacity-25"}>
+                  {boardTile.occupyingTile}
+                  <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectTile(boardTile.occupyingTile)} />
+                </div>
+              )
+            }</div>
+          })
         }
       </div>
 
