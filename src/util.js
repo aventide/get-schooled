@@ -51,7 +51,7 @@ export function getLegalMoveSpots(board, boardSpot) {
     return legalMoves;
 }
 
-export function calculateColorScore(tileSet, board) {
+export function calculateScore(tileSet, board, type) {
 
     const boardCopy = JSON.parse(JSON.stringify(board));
     let filteredBoard = boardCopy.flat().filter(item => item.occupyingTile).map(item => {
@@ -66,17 +66,12 @@ export function calculateColorScore(tileSet, board) {
 
     while (filteredBoard.length > 0) {
         const tileToEval = filteredBoard[0];
-        console.log("evaluating tile: ", tileToEval)
 
         if (filteredBoard.length > 0) {
-            const matches = getMatches(tileSet, filteredBoard, tileToEval)
-            console.log("matches: ", matches);
+            const matches = getMatches(tileSet, filteredBoard, tileToEval, type)
             score += getScoreForMatches(matches.size);
             filteredBoard = filteredBoard.filter(item => !matches.has(item.id))
         }
-
-        console.log("score now at: ", score)
-        console.log("remaining tiles: ", JSON.parse(JSON.stringify(filteredBoard)))
 
     }
 
@@ -88,10 +83,17 @@ function inBounds(x, y) {
     return x >= 0 && x < 6 && y >= 0 && y < 6;
 }
 
-function getMatches(tileSet, board, spot) {
+function getColorMatches(tileSet, board, spot){
+    return getMatches(tileSet, board, spot, "color")
+}
 
-    // const animal = tileSet[spot.occupyingTile].animal;
-    const color = tileSet[spot.id].color;
+function getAnimalMatches(tileSet, board, spot){
+    return getMatches(tileSet, board, spot, "animal")
+}
+
+function getMatches(tileSet, board, spot, type) {
+
+    const compare = tileSet[spot.id][type];
     const matchPool = new Set([spot.id]);
     let checkPool = [spot.id];
 
@@ -113,7 +115,7 @@ function getMatches(tileSet, board, spot) {
         ];
 
         checks.forEach(check => {
-            if (check && !matchPool.has(check.id) && tileSet[check.id].color === color) {
+            if (check && !matchPool.has(check.id) && tileSet[check.id][type] === compare) {
                 matchPool.add(check.id);
                 checkPool.push(check.id);
             }

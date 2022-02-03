@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { shuffle, take } from 'lodash';
 
-import { getLegalMoveSpots, calculateColorScore } from './util';
+import { getLegalMoveSpots, calculateScore } from './util';
 
 // https://www.svgrepo.com/
 
@@ -58,12 +58,18 @@ function App() {
 
   useEffect(() => {
     setAvailableBank(take(bank, 6))
+    console.clear();
     console.log(
-      calculateColorScore(tileSet, board)
+      "animalScore: ",
+      calculateScore(tileSet, board, "animal")
+    );
+    console.log(
+      "colorScore: ",
+      calculateScore(tileSet, board, "color")
     );
     if(bank.length === 0){
       console.log(
-        calculateColorScore(tileSet, board)
+        calculateScore(tileSet, board)
       );
     }
   }, [bank])
