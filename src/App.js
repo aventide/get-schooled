@@ -135,7 +135,6 @@ function App() {
               boardTile.occupyingTile &&
               (
                 <div className={boardTile.occupyingTile !== targetTile ? "" : "opacity-25"}>
-                  {boardTile.occupyingTile}
                   <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectTile(boardTile.occupyingTile)} />
                 </div>
               )
