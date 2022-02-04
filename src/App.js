@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { shuffle, take } from 'lodash';
 
 import { getLegalMoveSpots, calculateScore } from './util';
+import ColorPlayerIcon from './components/ColorPlayerIcon';
 
 // https://www.svgrepo.com/
 
@@ -134,29 +135,26 @@ function App() {
   return (
     <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
 
-      {/* <div className="w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300">
-      </div> */}
-
-      {/* <div className= "w-1/5 flex justify-center items-center border-2 border-blue-500 rounded-md text-blue-500">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-        </svg>
-        <span className='px-1 text-lg'>{bank.length}</span>
-      </div> */}
-
-      <label for="my-modal-2" class="btn btn-primary modal-button">Reveal Score</label>
-      <input type="checkbox" id="my-modal-2" class="modal-toggle" />
-      <div class="modal">
-        <div class="modal-box">
-          <p>
-            {`Animals Score: ${scores.animal}`}
-          </p>
-          <p>
-            {`Colors Score: ${scores.color}`}
-          </p>
-          <div class="modal-action">
-            <label for="my-modal-2" class="btn">Close</label>
+      <div className="fixed top-0 w-full py-4 md:w-3/5 lg:w-2/5 bg-blue-600 flex justify-evenly text-blue-100">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start">
+            <span className='text-xl'>CPU</span>
+            <span className='text-xs'>Animals</span>
           </div>
+          <span className='pl-6 text-2xl'>{scores.animal}</span>
+        </div>
+        <div className="w-1/5 flex justify-center items-center border-2 border-blue-100 rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span className='px-1 text-lg'>{bank.length}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start">
+            <span className='text-xl'>Alex</span>
+            <span className='text-xs'>Colors</span>
+          </div>
+          <span className='pl-6 text-2xl'>{scores.color}</span>
         </div>
       </div>
 
@@ -164,7 +162,7 @@ function App() {
         {
           board.flat().map(boardTile => {
             const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y)
-            return <div className={`group ${isLegalMoveTile ? 'bg-indigo-100' : 'bg-blue-200'} hover:bg-red-400 hover:text-white aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
+            return <div className={`group ${isLegalMoveTile ? 'bg-blue-400' : 'bg-blue-200'} hover:bg-orange-200 hover:text-white aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
               boardTile.occupyingTile &&
               (
                 <div className={boardTile.occupyingTile !== targetTile ? "" : "opacity-25"}>
@@ -175,8 +173,8 @@ function App() {
               {
                 isLegalMoveTile && (
                   <div className='h-full w-full flex justify-center items-center'>
-                    <svg height="20" width="20" className='fill-blue-300'>
-                      <circle cx="10" cy="10" r="5"/>
+                    <svg height="20" width="20" className='fill-blue-100'>
+                      <circle cx="10" cy="10" r="5" />
                     </svg>
                   </div>
                 )
