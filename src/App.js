@@ -61,6 +61,8 @@ function App() {
     animal: 0
   });
 
+  const [isTableTopMode, setIsTableTopMode] = useState(true);
+
   useEffect(() => {
     setAvailableBank(take(bank, 6))
     setScores({
@@ -133,9 +135,8 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-indigo-100 w-full flex justify-center items-center flex-col">
-
-      <div className="fixed top-0 w-full py-4 md:w-3/5 lg:w-2/5 bg-blue-600 flex justify-evenly text-blue-100">
+    <div className="h-screen bg-indigo-100 w-full flex items-center flex-col">
+      <div className={`w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} py-4 bg-blue-600 flex justify-evenly text-blue-100`}>
         <div className="flex items-center justify-between">
           <div className="flex flex-col items-start">
             <span className='text-xl'>CPU</span>
@@ -158,7 +159,7 @@ function App() {
         </div>
       </div>
 
-      <div className="mt-4 w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1">
+      <div className={`mt-4 w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${isTableTopMode ? "gap-2" : "gap-1"}`}>
         {
           board.flat().map(boardTile => {
             const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y)
@@ -186,8 +187,8 @@ function App() {
 
 
       {/* put a badge on the dock for total left */}
-      <div className="mt-4 flex flex-row justify-evenly items-center w-full">
-        {availableBank.length > 0 && <div className="w-full md:w-3/5 lg:w-2/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1">
+      <div className="mt-4 flex flex-row justify-center w-full">
+        {availableBank.length > 0 && <div className={`w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1`}>
           {
             availableBank.map((abItem) => (
               <div className={targetTile ? abItem.id !== targetTile ? "" : "opacity-25" : ""}>
