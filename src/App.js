@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { shuffle, take } from 'lodash';
 
 import { getLegalMoveSpots, calculateScore } from './util';
-import ColorPlayerIcon from './components/ColorPlayerIcon';
 
 // https://www.svgrepo.com/
 
@@ -61,7 +60,7 @@ function App() {
     animal: 0
   });
 
-  const [isTableTopMode, setIsTableTopMode] = useState(true);
+  const [isTableTopMode, setIsTableTopMode] = useState(false);
 
   useEffect(() => {
     setAvailableBank(take(bank, 6))
@@ -136,26 +135,29 @@ function App() {
 
   return (
     <div className="h-screen bg-indigo-100 w-full flex items-center flex-col">
-      <div className={`w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} py-4 bg-blue-600 flex justify-evenly text-blue-100`}>
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col items-start">
-            <span className='text-xl'>CPU</span>
-            <span className='text-xs'>Animals</span>
-          </div>
-          <span className='pl-6 text-2xl'>{scores.animal}</span>
+      <div className={`w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} bg-blue-600 flex justify-evenly text-blue-100 font-sspRegular`}>
+        <div className="flex items-center px-4 hover:bg-blue-400">
+          <button>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
         </div>
-        <div className="w-1/5 flex justify-center items-center border-2 border-blue-100 rounded-md">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          <span className='px-1 text-lg'>{bank.length}</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col items-start">
-            <span className='text-xl'>Alex</span>
-            <span className='text-xs'>Colors</span>
+        <div className='flex flex-1 justify-between px-6 py-2'>
+          <div className="flex items-center justify-between">
+            <span className='pr-6 text-3xl'>{scores.animal}</span>
+            <div className="flex flex-col items-center">
+              <span className='text-xl'>CPU</span>
+              <span className='text-xs font-fancy'>Animals</span>
+            </div>
           </div>
-          <span className='pl-6 text-2xl'>{scores.color}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col items-center animate-pulse">
+              <span className='text-xl'>Alex</span>
+              <span className='text-xs font-fancy'>Colors</span>
+            </div>
+            <span className='pl-6 text-3xl'>{scores.color}</span>
+          </div>
         </div>
       </div>
 
@@ -199,6 +201,15 @@ function App() {
         </div>}
       </div>
 
+      <div className={`flex-1 mt-4 w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} bg-blue-600 flex justify-evenly text-blue-100 font-sspRegular`}>
+
+      </div>
+
+      {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="50" />
+        </svg>
+      </div> */}
     </div>
   );
 }
