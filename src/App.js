@@ -136,10 +136,10 @@ function App() {
   return (
     <div className="h-screen bg-indigo-100 w-full flex items-center flex-col">
       <div className={`w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} bg-blue-600 flex justify-evenly text-blue-100 font-sspRegular`}>
-        <div className="flex items-center px-4 hover:bg-blue-400">
+        <div className="flex items-center px-4">
           <button>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
         </div>
@@ -187,9 +187,9 @@ function App() {
         }
       </div>
 
-      <div className="mt-4 flex flex-row justify-center w-full flex-1 bg-blue-600">
+      <div className={`mt-4 flex flex-row justify-center w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} flex-1`}>
         {availableBank.length > 0 &&
-          <div className={`w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}>
+          <div className={`w-full border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}>
             <div className="grid grid-cols-6 grid-rows-1 gap-1">
               {
                 availableBank.map((abItem) => (
@@ -201,7 +201,7 @@ function App() {
                 ))
               }
             </div>
-            <div className="mt-1 border-t-2 border-blue-200"></div>
+            <div className="mt-1 border-t-4 border-blue-200"></div>
             <div className="flex justify-between mx-2 my-4 text-white">
               {/* <button>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -215,7 +215,7 @@ function App() {
                 <p className="font-fancy mx-1">{bank.length}</p>
               </div>
               <button>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 hover:opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -223,9 +223,6 @@ function App() {
             </div>
           </div>}
       </div>
-
-      {/* <div className={`flex-1 mt-4 w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} bg-blue-600 flex justify-evenly text-blue-100 font-sspRegular`}></div> */}
-
       {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" />
