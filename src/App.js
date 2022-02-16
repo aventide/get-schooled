@@ -151,8 +151,8 @@ function App() {
               <span className='text-xs font-fancy'>Animals</span>
             </div>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col items-center animate-pulse">
+          <div className="flex items-center justify-between text-orange-200">
+            <div className="flex flex-col items-center">
               <span className='text-xl'>Alex</span>
               <span className='text-xs font-fancy'>Colors</span>
             </div>
@@ -165,10 +165,10 @@ function App() {
         {
           board.flat().map(boardTile => {
             const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y)
-            return <div className={`group ${isLegalMoveTile ? 'bg-blue-400' : 'bg-blue-200'} hover:bg-orange-200 hover:text-white aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
+            return <div className={`group ${isLegalMoveTile ? 'bg-blue-400' : boardTile.occupyingTile && boardTile.occupyingTile === targetTile ? 'bg-orange-200' : 'bg-blue-200'} hover:bg-orange-200 aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
               boardTile.occupyingTile &&
               (
-                <div className={boardTile.occupyingTile !== targetTile ? "" : "opacity-25"}>
+                <div className={boardTile.occupyingTile === targetTile ? "animate-pulse-slow" : ""}>
                   <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectTile(boardTile.occupyingTile)} />
                 </div>
               )
@@ -187,23 +187,44 @@ function App() {
         }
       </div>
 
-
-      {/* put a badge on the dock for total left */}
-      <div className="mt-4 flex flex-row justify-center w-full">
-        {availableBank.length > 0 && <div className={`w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-1 cursor-pointer gap-1`}>
-          {
-            availableBank.map((abItem) => (
-              <div className={targetTile ? abItem.id !== targetTile ? "" : "opacity-25" : ""}>
-                <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => handleSelectTile(abItem.id)} />
+      <div className="mt-4 flex flex-row justify-center w-full flex-1 bg-blue-600">
+        {availableBank.length > 0 &&
+          <div className={`w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}>
+            <div className="grid grid-cols-6 grid-rows-1 gap-1">
+              {
+                availableBank.map((abItem) => (
+                  <div className={abItem.id !== targetTile ? "" : "bg-orange-200 rounded-md"}>
+                    <div className={abItem.id !== targetTile ? "" : "animate-pulse-slow"}>
+                      <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => handleSelectTile(abItem.id)} />
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+            <div className="mt-1 border-t-2 border-blue-200"></div>
+            <div className="flex justify-between mx-2 my-4 text-white">
+              {/* <button>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button> */}
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <p className="font-fancy mx-1">{bank.length}</p>
               </div>
-            ))
-          }
-        </div>}
+              <button>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+            </div>
+          </div>}
       </div>
 
-      <div className={`flex-1 mt-4 w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} bg-blue-600 flex justify-evenly text-blue-100 font-sspRegular`}>
-
-      </div>
+      {/* <div className={`flex-1 mt-4 w-full ${isTableTopMode ? '' : "md:w-3/5 lg:w-2/5"} bg-blue-600 flex justify-evenly text-blue-100 font-sspRegular`}></div> */}
 
       {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">

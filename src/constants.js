@@ -1,10 +1,10 @@
 export const COLORS = [
-    "red",
-    "fuchsia",
-    "lime",
-    "pink",
-    "yellow",
-    "cyan"
+    "#EAB6BD", // pink
+    "#D96E6C", // red
+    "#F7DE88", // yellow
+    "#B7DFE0", // green
+    "#80CAE8", // lightblue
+    "#9B9FDA" // purple
 ];
 
 export const ANIMALS = [
