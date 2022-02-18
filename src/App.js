@@ -48,6 +48,7 @@ function App() {
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
 
   // the entire set of tiles. 36 of them.
   // generate by fitting every animal/color combo, and setting a unique id
@@ -61,6 +62,20 @@ function App() {
   });
 
   const [isTableTopMode, setIsTableTopMode] = useState(false);
+  const [players, setPlayers] = useState({
+    animals: {
+      playerName: "CPU",
+      score: 0,
+      isTurn: false
+    },
+    colors: {
+      playerName: "Alex",
+      score: 0,
+      isTurn: true
+    }
+  });
+
+  const [turnFor, setTurnFor] = useState(Math.random() < 0.5 ? "animals" : "colors");
 
   useEffect(() => {
     setAvailableBank(take(bank, 6))
@@ -76,6 +91,11 @@ function App() {
     }
   }, [bank])
 
+  function toggleTurnFor(){
+    setTurnFor(turnFor === "colors" ? "animals" : "colors");
+    setHasMoved(false)
+  }
+
   function handlePlaceTile(x, y) {
 
     // addressed column-first
@@ -89,7 +109,6 @@ function App() {
     // if we ARE moving, make sure it's being done legally
     const isDoingLegalMove = !isMoving || isLegalMove;
 
-    // new tile placement
     if (targetTile && !isSpotOccupied && isDoingLegalMove) {
       const newBoard = board;
 
@@ -104,14 +123,25 @@ function App() {
 
       setTargetTile(null);
       setBoard(newBoard);
-      setBank(bank.filter(item => item.id !== targetTile))
       setIsMoving(false);
       setLegalMoveSpots([])
+
+      if(!isMoving){
+        toggleTurnFor()
+        setBank(bank.filter(item => item.id !== targetTile))
+      } else {
+        setHasMoved(true)
+      }
+    }
+  }
+
+  function handleSelectBoardTile(id){
+    if(!hasMoved){
+      handleSelectTile(id)
     }
   }
 
   function handleSelectTile(id) {
-
     setIsMoving(false);
     setLegalMoveSpots([]);
 
@@ -144,14 +174,14 @@ function App() {
           </button>
         </div>
         <div className='flex flex-1 justify-between px-6 py-2'>
-          <div className="flex items-center justify-between">
+        <div className={`flex items-center justify-between ${turnFor === "animals" ? 'text-orange-200': ""}`}>
             <span className='pr-6 text-3xl'>{scores.animal}</span>
             <div className="flex flex-col items-center">
               <span className='text-xl'>CPU</span>
               <span className='text-xs font-fancy'>Animals</span>
             </div>
           </div>
-          <div className="flex items-center justify-between text-orange-200">
+          <div className={`flex items-center justify-between ${turnFor === "colors" ? 'text-orange-200': ""}`}>
             <div className="flex flex-col items-center">
               <span className='text-xl'>Alex</span>
               <span className='text-xs font-fancy'>Colors</span>
@@ -169,7 +199,7 @@ function App() {
               boardTile.occupyingTile &&
               (
                 <div className={boardTile.occupyingTile === targetTile ? "animate-pulse-slow" : ""}>
-                  <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectTile(boardTile.occupyingTile)} />
+                  <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectBoardTile(boardTile.occupyingTile)} />
                 </div>
               )
             }
