@@ -48,8 +48,8 @@ export default function BoardFooter({
                     })} />
                 </div>
                 <div className="flex justify-between text-blue-400 w-full my-4">
-                    <span className='font-sspRegular font-bold'>Move Takeback</span>
-                    <input type="checkbox" class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75" />
+                    <span className='font-sspRegular font-bold text-gray-400'>Move Takeback</span>
+                    <input type="checkbox" class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75" checked={false} />
                 </div>
             </Modal>
         </div>
