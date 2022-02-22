@@ -2,6 +2,20 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  daisyui: {
+    themes: [
+      {
+        board: {
+          primary: "#60a5fa",
+          neutral: "#3d4451",
+          secondary: "#f6d860",
+          accent: "#37cdbe",
+          neutral: "#3d4451",
+          "base-100": "#dbeafe",
+        }
+      }
+    ]
+  },
   theme: {
     extend: {
       animation: {
@@ -29,7 +43,7 @@ module.exports = {
     screens: {
       'sm': '500px',
       'md': '550px',
-      'lg': '1024px',
+      'lg': '900px',
       'xl': '1280px',
       '2xl': '1536px',
     }

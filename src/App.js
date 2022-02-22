@@ -64,7 +64,10 @@ function App() {
     animal: 0
   });
 
-  const [isTableTopMode, setIsTableTopMode] = useState(false);
+  const [boardSettings, setBoardSettings] = useState({
+    isTableTopMode: false
+  });
+
   const [players, setPlayers] = useState({
     animals: {
       playerName: "CPU",
@@ -166,6 +169,8 @@ function App() {
 
   }
 
+  const { isTableTopMode } = boardSettings;
+
   return (
     <div className="h-screen bg-indigo-100 w-full flex items-center flex-col">
 
@@ -211,7 +216,7 @@ function App() {
             }
           </div>
           <div className="mt-1 border-t-4 border-blue-200"></div>
-          <BoardFooter bankSize={bank.length}/>
+          <BoardFooter bankSize={bank.length} settings={boardSettings} onSettingsChanged={(newSettings) => setBoardSettings(newSettings)}/>
         </div>
       </div>
       {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">

@@ -2,8 +2,9 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 
 export default function BoardFooter({
-    bankSize
-    // setSettings
+    bankSize,
+    settings,
+    onSettingsChanged,
 }) {
 
     const [isBoardSettingsOpen, setIsBoardSettingsOpen] = useState(false);
@@ -29,14 +30,26 @@ export default function BoardFooter({
                 isOpen={isBoardSettingsOpen}
                 onRequestClose={() => setIsBoardSettingsOpen(false)}
                 contentLabel="In-Game Settings"
-                className="bg-blue-100 fixed inset-8 p-8 border-blue-400 border-4 rounded-lg"
+                className="bg-blue-100 fixed inset-8 md:inset-32 lg:inset-72 m-auto p-8 border-blue-400 border-4 rounded-lg h-max"
             >
-                <div className="flex justify-end">
-                    <button className='text-blue-400 hover:opacity-75' onClick={() => setIsBoardSettingsOpen(false)}>
+                <div className="flex justify-between text-blue-400 w-full mb-12">
+                    <span className="font-fancy sele">Settings</span>
+                    <button className='hover:opacity-75' onClick={() => setIsBoardSettingsOpen(false)}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
+                </div>
+                <div className="flex justify-between text-blue-400 w-full my-4">
+                    <span className='font-sspRegular font-bold'>Tabletop Mode</span>
+                    <input type="checkbox" class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75" checked={settings?.isTableTopMode} onChange={() => onSettingsChanged({
+                        ...settings,
+                        isTableTopMode: !settings.isTableTopMode
+                    })} />
+                </div>
+                <div className="flex justify-between text-blue-400 w-full my-4">
+                    <span className='font-sspRegular font-bold'>Move Takeback</span>
+                    <input type="checkbox" class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75" />
                 </div>
             </Modal>
         </div>
