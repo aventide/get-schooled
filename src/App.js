@@ -85,17 +85,14 @@ function App() {
 
   useEffect(() => {
     setAvailableBank(take(bank, 6))
+  }, [bank])
+
+  useEffect(() => {
     setScores({
       animal: calculateScore(tileSet, board, "animal"),
       color: calculateScore(tileSet, board, "color")
     })
-    if (bank.length === 0) {
-      setScores({
-        animal: calculateScore(tileSet, board, "animal"),
-        color: calculateScore(tileSet, board, "color")
-      })
-    }
-  }, [bank])
+  }, [hasMoved, turnFor])
 
   function toggleTurnFor(){
     setTurnFor(turnFor === "colors" ? "animals" : "colors");
@@ -179,8 +176,9 @@ function App() {
       <div className={`mt-4 w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${isTableTopMode ? "gap-2" : "gap-1"}`}>
         {
           board.flat().map(boardTile => {
-            const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y)
-            return <div className={`group ${isLegalMoveTile ? 'bg-blue-400' : boardTile.occupyingTile && boardTile.occupyingTile === targetTile ? 'bg-orange-200' : 'bg-blue-200'} hover:bg-orange-200 aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
+            const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y);
+            const showPlacementDot = isLegalMoveTile || (!boardTile.occupyingTile && targetTile && !isMoving);
+            return <div className={`group ${showPlacementDot ? 'bg-blue-400' : boardTile.occupyingTile && boardTile.occupyingTile === targetTile ? 'bg-orange-200' : 'bg-blue-200'} hover:bg-orange-200 aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
               boardTile.occupyingTile &&
               (
                 <div className={boardTile.occupyingTile === targetTile ? "animate-pulse-slow" : ""}>
@@ -189,7 +187,7 @@ function App() {
               )
             }
               {
-                isLegalMoveTile && (
+                showPlacementDot && (
                   <div className='h-full w-full flex justify-center items-center'>
                     <svg height="20" width="20" className='fill-blue-100'>
                       <circle cx="10" cy="10" r="5" />
