@@ -1,5 +1,3 @@
-import { kebabCase, matches } from "lodash";
-
 export function getLegalMoveSpots(board, boardSpot) {
 
     const legalMoves = [];
@@ -78,18 +76,6 @@ export function calculateScore(tileSet, board, type) {
     return score;
 
 };
-
-function inBounds(x, y) {
-    return x >= 0 && x < 6 && y >= 0 && y < 6;
-}
-
-function getColorMatches(tileSet, board, spot){
-    return getMatches(tileSet, board, spot, "color")
-}
-
-function getAnimalMatches(tileSet, board, spot){
-    return getMatches(tileSet, board, spot, "animal")
-}
 
 function getMatches(tileSet, board, spot, type) {
 

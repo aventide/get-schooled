@@ -12,7 +12,7 @@ const availableGameModes = [SOLO, ONLINE, TABLETOP];
 export default function App() {
 
     const [gameMode, setGameMode] = useState(NONE_SELECTED);
-    const [gameScreen, setGameScreen] = useState(MAIN_MENU);
+    const [gameScreen, setGameScreen] = useState(TABLETOP);
 
     return (
         <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center">

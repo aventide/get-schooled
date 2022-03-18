@@ -46,16 +46,16 @@ function generateTileSet() {
   return tileSet;
 }
 
+// the entire set of tiles. 36 of them.
+// generate by fitting every animal/color combo, and setting a unique id
+const tileSet = generateTileSet();
+
 function GameBoard() {
 
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
-
-  // the entire set of tiles. 36 of them.
-  // generate by fitting every animal/color combo, and setting a unique id
-  const [tileSet, setTileSet] = useState(generateTileSet());
   const [bank, setBank] = useState(shuffle(Object.values(tileSet)));
   const [availableBank, setAvailableBank] = useState([]);
   const [legalMoveSpots, setLegalMoveSpots] = useState([]);
@@ -66,19 +66,6 @@ function GameBoard() {
 
   const [boardSettings, setBoardSettings] = useState({
     isTableTopMode: false
-  });
-
-  const [players, setPlayers] = useState({
-    animals: {
-      playerName: "CPU",
-      score: 0,
-      isTurn: false
-    },
-    colors: {
-      playerName: "Alex",
-      score: 0,
-      isTurn: true
-    }
   });
 
   const [turnFor, setTurnFor] = useState(Math.random() < 0.5 ? "animals" : "colors");
@@ -92,9 +79,9 @@ function GameBoard() {
       animal: calculateScore(tileSet, board, "animal"),
       color: calculateScore(tileSet, board, "color")
     })
-  }, [hasMoved, turnFor])
+  }, [hasMoved, turnFor, board])
 
-  function toggleTurnFor(){
+  function toggleTurnFor() {
     setTurnFor(turnFor === "colors" ? "animals" : "colors");
     setHasMoved(false)
   }
@@ -129,7 +116,7 @@ function GameBoard() {
       setIsMoving(false);
       setLegalMoveSpots([])
 
-      if(!isMoving){
+      if (!isMoving) {
         toggleTurnFor()
         setBank(bank.filter(item => item.id !== targetTile))
       } else {
@@ -138,8 +125,8 @@ function GameBoard() {
     }
   }
 
-  function handleSelectBoardTile(id){
-    if(!hasMoved){
+  function handleSelectBoardTile(id) {
+    if (!hasMoved) {
       handleSelectTile(id)
     }
   }
@@ -170,7 +157,7 @@ function GameBoard() {
 
   return (
     <>
-      <BoardHeader isTableTopMode={isTableTopMode} scores={scores} turnFor={turnFor}/>
+      <BoardHeader isTableTopMode={isTableTopMode} scores={scores} turnFor={turnFor} />
 
       <div className={`mt-4 w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${isTableTopMode ? "gap-2" : "gap-1"}`}>
         {
@@ -213,7 +200,7 @@ function GameBoard() {
             }
           </div>
           <div className="mt-1 border-t-4 border-blue-200"></div>
-          <BoardFooter bankSize={bank.length} settings={boardSettings} onSettingsChanged={(newSettings) => setBoardSettings(newSettings)}/>
+          <BoardFooter bankSize={bank.length} settings={boardSettings} onSettingsChanged={(newSettings) => setBoardSettings(newSettings)} />
         </div>
       </div>
       {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">
