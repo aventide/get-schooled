@@ -169,8 +169,7 @@ function GameBoard() {
   const { isTableTopMode } = boardSettings;
 
   return (
-    <div className="h-screen bg-indigo-100 w-full flex items-center flex-col">
-
+    <>
       <BoardHeader isTableTopMode={isTableTopMode} scores={scores} turnFor={turnFor}/>
 
       <div className={`mt-4 w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${isTableTopMode ? "gap-2" : "gap-1"}`}>
@@ -222,7 +221,7 @@ function GameBoard() {
           <circle cx="50" cy="50" r="50" />
         </svg>
       </div> */}
-    </div>
+    </>
   );
 }
 
