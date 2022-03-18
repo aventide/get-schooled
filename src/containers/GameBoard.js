@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
-import { shuffle, take } from 'lodash';
+import { useState, useEffect } from "react";
+import { shuffle, take } from "lodash";
 
-import BoardHeader from '../components/BoardHeader';
-import BoardFooter from '../components/BoardFooter';
+import BoardHeader from "../components/BoardHeader";
+import BoardFooter from "../components/BoardFooter";
 
-import { getLegalMoveSpots, calculateScore } from '../util';
+import { getLegalMoveSpots, calculateScore } from "../util";
 
 // https://www.svgrepo.com/
 
-import Tile from '../components/Tile';
-import BankTile from '../components/BankTile';
-import { COLORS, ANIMALS } from '../constants';
+import Tile from "../components/Tile";
+import BankTile from "../components/BankTile";
+import { COLORS, ANIMALS } from "../constants";
 
 function generateInitialBoard() {
-
   const board = [];
   for (let y = 0; y < 6; y++) {
     const row = [];
@@ -21,7 +20,7 @@ function generateInitialBoard() {
       row.push({
         x,
         y,
-      })
+      });
     }
     board.push(row);
   }
@@ -33,16 +32,16 @@ function generateTileSet() {
   const tileSet = {};
   let counter = 1;
 
-  COLORS.forEach(color => {
-    ANIMALS.forEach(animal => {
+  COLORS.forEach((color) => {
+    ANIMALS.forEach((animal) => {
       tileSet[counter] = {
         animal,
         color,
-        id: counter
+        id: counter,
       };
       counter++;
-    })
-  })
+    });
+  });
   return tileSet;
 }
 
@@ -51,7 +50,6 @@ function generateTileSet() {
 const tileSet = generateTileSet();
 
 function GameBoard() {
-
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
@@ -61,37 +59,40 @@ function GameBoard() {
   const [legalMoveSpots, setLegalMoveSpots] = useState([]);
   const [scores, setScores] = useState({
     color: 0,
-    animal: 0
+    animal: 0,
   });
 
   const [boardSettings, setBoardSettings] = useState({
-    isTableTopMode: false
+    isTableTopMode: false,
   });
 
-  const [turnFor, setTurnFor] = useState(Math.random() < 0.5 ? "animals" : "colors");
+  const [turnFor, setTurnFor] = useState(
+    Math.random() < 0.5 ? "animals" : "colors"
+  );
 
   useEffect(() => {
-    setAvailableBank(take(bank, 6))
-  }, [bank])
+    setAvailableBank(take(bank, 6));
+  }, [bank]);
 
   useEffect(() => {
     setScores({
       animal: calculateScore(tileSet, board, "animal"),
-      color: calculateScore(tileSet, board, "color")
-    })
-  }, [hasMoved, turnFor, board])
+      color: calculateScore(tileSet, board, "color"),
+    });
+  }, [hasMoved, turnFor, board]);
 
   function toggleTurnFor() {
     setTurnFor(turnFor === "colors" ? "animals" : "colors");
-    setHasMoved(false)
+    setHasMoved(false);
   }
 
   function handlePlaceTile(x, y) {
-
     // addressed column-first
     const spotToPlace = board[y][x];
-    const isSpotOccupied = spotToPlace['occupyingTile'];
-    const isLegalMove = legalMoveSpots.some(spot => spot.x === x && spot.y === y)
+    const isSpotOccupied = spotToPlace["occupyingTile"];
+    const isLegalMove = legalMoveSpots.some(
+      (spot) => spot.x === x && spot.y === y
+    );
 
     // before we do any deletion or adding, make sure we have a tile to place, and it's
     // going in a legal spot
@@ -103,31 +104,33 @@ function GameBoard() {
       const newBoard = board;
 
       // delete any duplicates of tiles, i.e. in a tile move
-      const alreadyPlacedTargetTile = newBoard.flat().find(item => item.occupyingTile === targetTile);
+      const alreadyPlacedTargetTile = newBoard
+        .flat()
+        .find((item) => item.occupyingTile === targetTile);
       if (alreadyPlacedTargetTile) {
         alreadyPlacedTargetTile.occupyingTile = null;
       }
 
       // addressed column-first
-      newBoard[y][x]['occupyingTile'] = targetTile;
+      newBoard[y][x]["occupyingTile"] = targetTile;
 
       setTargetTile(null);
       setBoard(newBoard);
       setIsMoving(false);
-      setLegalMoveSpots([])
+      setLegalMoveSpots([]);
 
       if (!isMoving) {
-        toggleTurnFor()
-        setBank(bank.filter(item => item.id !== targetTile))
+        toggleTurnFor();
+        setBank(bank.filter((item) => item.id !== targetTile));
       } else {
-        setHasMoved(true)
+        setHasMoved(true);
       }
     }
   }
 
   function handleSelectBoardTile(id) {
     if (!hasMoved) {
-      handleSelectTile(id)
+      handleSelectTile(id);
     }
   }
 
@@ -141,66 +144,118 @@ function GameBoard() {
       setIsMoving(false);
       setLegalMoveSpots([]);
     } else {
-
       // only calculate legalMoves if we're doing a MOVE on the board
-      const boardTargetTile = board.flat().find(item => item.occupyingTile === id);
+      const boardTargetTile = board
+        .flat()
+        .find((item) => item.occupyingTile === id);
       if (boardTargetTile) {
-        setIsMoving(true)
-        setLegalMoveSpots(getLegalMoveSpots(board, boardTargetTile))
+        setIsMoving(true);
+        setLegalMoveSpots(getLegalMoveSpots(board, boardTargetTile));
       }
       setTargetTile(id);
     }
-
   }
 
   const { isTableTopMode } = boardSettings;
 
   return (
     <>
-      <BoardHeader isTableTopMode={isTableTopMode} scores={scores} turnFor={turnFor} />
+      <BoardHeader
+        isTableTopMode={isTableTopMode}
+        scores={scores}
+        turnFor={turnFor}
+      />
 
-      <div className={`mt-4 w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${isTableTopMode ? "gap-2" : "gap-1"}`}>
-        {
-          board.flat().map(boardTile => {
-            const isLegalMoveTile = legalMoveSpots.find(spot => spot.x === boardTile.x && spot.y === boardTile.y);
-            const showPlacementDot = isLegalMoveTile || (!boardTile.occupyingTile && targetTile && !isMoving);
-            return <div className={`group ${showPlacementDot ? 'bg-blue-400' : boardTile.occupyingTile && boardTile.occupyingTile === targetTile ? 'bg-orange-200' : 'bg-blue-200'} hover:bg-orange-200 aspect-square`} onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}>{
-              boardTile.occupyingTile &&
-              (
-                <div className={boardTile.occupyingTile === targetTile ? "animate-pulse-slow" : ""}>
-                  <Tile animal={tileSet[boardTile.occupyingTile].animal} color={tileSet[boardTile.occupyingTile].color} onSelect={() => handleSelectBoardTile(boardTile.occupyingTile)} />
+      <div
+        className={`mt-4 w-full ${
+          isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
+        } border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${
+          isTableTopMode ? "gap-2" : "gap-1"
+        }`}
+      >
+        {board.flat().map((boardTile) => {
+          const isLegalMoveTile = legalMoveSpots.find(
+            (spot) => spot.x === boardTile.x && spot.y === boardTile.y
+          );
+          const showPlacementDot =
+            isLegalMoveTile ||
+            (!boardTile.occupyingTile && targetTile && !isMoving);
+          return (
+            <div
+              className={`group ${
+                showPlacementDot
+                  ? "bg-blue-400"
+                  : boardTile.occupyingTile &&
+                    boardTile.occupyingTile === targetTile
+                  ? "bg-orange-200"
+                  : "bg-blue-200"
+              } hover:bg-orange-200 aspect-square`}
+              onClick={() => handlePlaceTile(boardTile.x, boardTile.y)}
+            >
+              {boardTile.occupyingTile && (
+                <div
+                  className={
+                    boardTile.occupyingTile === targetTile
+                      ? "animate-pulse-slow"
+                      : ""
+                  }
+                >
+                  <Tile
+                    animal={tileSet[boardTile.occupyingTile].animal}
+                    color={tileSet[boardTile.occupyingTile].color}
+                    onSelect={() =>
+                      handleSelectBoardTile(boardTile.occupyingTile)
+                    }
+                  />
                 </div>
-              )
-            }
-              {
-                showPlacementDot && (
-                  <div className='h-full w-full flex justify-center items-center'>
-                    <svg height="20" width="20" className='fill-blue-100'>
-                      <circle cx="10" cy="10" r="5" />
-                    </svg>
-                  </div>
-                )
-              }
+              )}
+              {showPlacementDot && (
+                <div className="h-full w-full flex justify-center items-center">
+                  <svg height="20" width="20" className="fill-blue-100">
+                    <circle cx="10" cy="10" r="5" />
+                  </svg>
+                </div>
+              )}
             </div>
-          })
-        }
+          );
+        })}
       </div>
 
-      <div className={`mt-4 flex flex-row justify-center w-full ${isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"} flex-1`}>
-        <div className={`w-full border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}>
+      <div
+        className={`mt-4 flex flex-row justify-center w-full ${
+          isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
+        } flex-1`}
+      >
+        <div
+          className={`w-full border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}
+        >
           <div className="grid grid-cols-6 grid-rows-1 gap-1">
-            {
-              availableBank.map((abItem) => (
-                <div className={abItem.id !== targetTile ? "" : "bg-orange-200 rounded-md"}>
-                  <div className={abItem.id !== targetTile ? "" : "animate-pulse-slow"}>
-                    <BankTile animal={abItem.animal} color={abItem.color} onSelect={() => handleSelectTile(abItem.id)} />
-                  </div>
+            {availableBank.map((abItem) => (
+              <div
+                className={
+                  abItem.id !== targetTile ? "" : "bg-orange-200 rounded-md"
+                }
+              >
+                <div
+                  className={
+                    abItem.id !== targetTile ? "" : "animate-pulse-slow"
+                  }
+                >
+                  <BankTile
+                    animal={abItem.animal}
+                    color={abItem.color}
+                    onSelect={() => handleSelectTile(abItem.id)}
+                  />
                 </div>
-              ))
-            }
+              </div>
+            ))}
           </div>
           <div className="mt-1 border-t-4 border-blue-200"></div>
-          <BoardFooter bankSize={bank.length} settings={boardSettings} onSettingsChanged={(newSettings) => setBoardSettings(newSettings)} />
+          <BoardFooter
+            bankSize={bank.length}
+            settings={boardSettings}
+            onSettingsChanged={(newSettings) => setBoardSettings(newSettings)}
+          />
         </div>
       </div>
       {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">

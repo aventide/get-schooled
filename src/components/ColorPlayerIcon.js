@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const ColorPlayerIcon = ({ style, className }) => (
   <svg viewBox="0 0 300 300" style={style} className={className}>

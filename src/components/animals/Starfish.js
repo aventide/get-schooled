@@ -1,8 +1,6 @@
 import React from "react";
 
-function Starfish({
-    color="#000"
-}) {
+function Starfish({ color = "#000" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,6 @@
 import React from "react";
 
-function Seahorse({
-    color="#000"
-}) {
+function Seahorse({ color = "#000" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
