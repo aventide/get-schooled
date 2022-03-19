@@ -49,7 +49,7 @@ function generateTileSet() {
 // generate by fitting every animal/color combo, and setting a unique id
 const tileSet = generateTileSet();
 
-function GameBoard() {
+function GameBoard({ onBack }) {
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
@@ -164,6 +164,7 @@ function GameBoard() {
         isTableTopMode={isTableTopMode}
         scores={scores}
         turnFor={turnFor}
+        onBack={onBack}
       />
 
       <div

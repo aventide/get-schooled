@@ -1,4 +1,9 @@
-export default function BoardHeader({ isTableTopMode, scores, turnFor }) {
+export default function BoardHeader({
+  isTableTopMode,
+  scores,
+  turnFor,
+  onBack,
+}) {
   return (
     <div
       className={`w-full ${
@@ -6,7 +11,7 @@ export default function BoardHeader({ isTableTopMode, scores, turnFor }) {
       } bg-blue-600 flex justify-evenly text-white font-sspRegular`}
     >
       <div className="flex items-center px-4">
-        <button>
+        <button onClick={onBack}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-8 w-8 text-white hover:opacity-75"

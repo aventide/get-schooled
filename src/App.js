@@ -10,25 +10,24 @@ const TABLETOP = "tabletop";
 const availableGameModes = [SOLO, ONLINE, TABLETOP];
 
 export default function App() {
-  const [gameMode, setGameMode] = useState(NONE_SELECTED);
-  const [gameScreen, setGameScreen] = useState(TABLETOP);
+  const [gameScreen, setGameScreen] = useState(MAIN_MENU);
 
   return (
     <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center">
-      {gameScreen === MAIN_MENU && (
-        <MainMenu
-          modes={availableGameModes}
-          onSelectMode={(mode) => setGameMode(mode)}
-        />
+      {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
+      {gameScreen === TABLETOP && (
+        <GameBoard onBack={() => setGameScreen(MAIN_MENU)} />
       )}
-      {gameScreen === TABLETOP && <GameBoard />}
     </div>
   );
 }
 
-function MenuButton({ icon, text }) {
+function MenuButton({ icon, text, onClick }) {
   return (
-    <div className="bg-blue-500 h-4 mx-8 my-2 py-6 font-fancy text-blue-100 rounded-md flex items-center relative cursor-pointer hover:opacity-75">
+    <div
+      className="bg-blue-500 h-4 mx-8 my-2 py-6 font-fancy text-blue-100 rounded-md flex items-center relative cursor-pointer hover:opacity-75 select-none"
+      onClick={onClick}
+    >
       <div className="absolute left-4">{icon}</div>
       <div className="flex flex-1 justify-center">
         <button className="flex">
@@ -73,7 +72,7 @@ const multiPlayerIcon = (
   </svg>
 );
 
-function MainMenu() {
+function MainMenu({ onScreenSet }) {
   return (
     <div
       className={`w-full h-screen ${
@@ -82,7 +81,11 @@ function MainMenu() {
     >
       <MenuButton text="solo" icon={singlePlayerIcon} />
       <MenuButton text="online" icon={multiPlayerIcon} />
-      <MenuButton text="tabletop" icon={multiPlayerIcon} />
+      <MenuButton
+        text="tabletop"
+        icon={multiPlayerIcon}
+        onClick={() => onScreenSet(TABLETOP)}
+      />
     </div>
   );
 }
