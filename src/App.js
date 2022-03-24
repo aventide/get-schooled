@@ -1,5 +1,6 @@
 import { useState } from "react";
 import GameBoard from "./containers/GameBoard";
+import MenuButton from "./components/MenuButton";
 
 const NONE_SELECTED = "none_selected";
 const MAIN_MENU = "main_menu";
@@ -18,22 +19,6 @@ export default function App() {
       {gameScreen === TABLETOP && (
         <GameBoard onBack={() => setGameScreen(MAIN_MENU)} />
       )}
-    </div>
-  );
-}
-
-function MenuButton({ icon, text, onClick }) {
-  return (
-    <div
-      className="bg-blue-500 h-4 mx-8 my-2 py-6 font-fancy text-blue-100 rounded-md flex items-center relative cursor-pointer hover:opacity-75 select-none"
-      onClick={onClick}
-    >
-      <div className="absolute left-4">{icon}</div>
-      <div className="flex flex-1 justify-center">
-        <button className="flex">
-          <span className="px-3">{text}</span>
-        </button>
-      </div>
     </div>
   );
 }
@@ -79,13 +64,15 @@ function MainMenu({ onScreenSet }) {
         false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
       } bg-blue-300 flex flex-col`}
     >
-      <MenuButton text="solo" icon={singlePlayerIcon} />
-      <MenuButton text="online" icon={multiPlayerIcon} />
-      <MenuButton
-        text="tabletop"
-        icon={multiPlayerIcon}
-        onClick={() => onScreenSet(TABLETOP)}
-      />
+      <dix className="mx-8">
+        <MenuButton text="solo" icon={singlePlayerIcon} />
+        <MenuButton text="online" icon={multiPlayerIcon} />
+        <MenuButton
+          text="tabletop"
+          icon={multiPlayerIcon}
+          onClick={() => onScreenSet(TABLETOP)}
+        />
+      </dix>
     </div>
   );
 }

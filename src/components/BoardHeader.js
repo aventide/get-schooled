@@ -1,9 +1,15 @@
+import StyledModal from "./StyledModal";
+import MenuButton from "./MenuButton";
+import { useState } from "react";
+
 export default function BoardHeader({
   isTableTopMode,
   scores,
   turnFor,
   onBack,
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div
       className={`w-full ${
@@ -11,7 +17,7 @@ export default function BoardHeader({
       } bg-blue-600 flex justify-evenly text-white font-sspRegular`}
     >
       <div className="flex items-center px-4">
-        <button onClick={onBack}>
+        <button onClick={() => setIsModalOpen(true)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-8 w-8 text-white hover:opacity-75"
@@ -36,7 +42,7 @@ export default function BoardHeader({
         >
           <span className="pr-6 text-3xl">{scores.animal}</span>
           <div className="flex flex-col items-center">
-            <span className="text-xl">CPU</span>
+            <span className="text-xl">P1</span>
             <span className="text-xs font-fancy">Animals</span>
           </div>
         </div>
@@ -46,12 +52,22 @@ export default function BoardHeader({
           }`}
         >
           <div className="flex flex-col items-center">
-            <span className="text-xl">Alex</span>
+            <span className="text-xl">P2</span>
             <span className="text-xs font-fancy">Colors</span>
           </div>
           <span className="pl-6 text-3xl">{scores.color}</span>
         </div>
       </div>
+      <StyledModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Reset"
+      >
+        <p className="font-sspRegular font-bold mb-8">
+          Going back will reset the game. Continue?
+        </p>
+        <MenuButton onClick={onBack} text="Do it" />
+      </StyledModal>
     </div>
   );
 }
