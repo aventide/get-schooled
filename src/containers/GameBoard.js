@@ -64,6 +64,7 @@ function GameBoard({ onBack }) {
 
   const [boardSettings, setBoardSettings] = useState({
     isTableTopMode: false,
+    isConfirmMovesMode: true,
   });
 
   const [turnFor, setTurnFor] = useState(

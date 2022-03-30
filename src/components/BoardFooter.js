@@ -54,7 +54,31 @@ export default function BoardFooter({ bankSize, settings, onSettingsChanged }) {
         title="Settings"
       >
         <div className="flex justify-between text-blue-400 w-full my-4">
-          <span className="font-sspRegular font-bold">Tablet Mode</span>
+          <div>
+            <p className="font-sspRegular font-bold ">Confirm Moves</p>
+            <p className="text-xs text-black">
+              Change moves before completing your turn
+            </p>
+          </div>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75"
+            checked={settings?.isConfirmMovesMode}
+            onChange={() =>
+              onSettingsChanged({
+                ...settings,
+                isConfirmMovesMode: !settings.isConfirmMovesMode,
+              })
+            }
+          />
+        </div>
+        <div className="flex justify-between text-blue-400 w-full my-4">
+          <div>
+            <p className="font-sspRegular font-bold">Tablet Mode</p>
+            <p className="text-xs text-black">
+              Use the full width of a touch screen
+            </p>
+          </div>
           <input
             type="checkbox"
             class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75"
@@ -65,16 +89,6 @@ export default function BoardFooter({ bankSize, settings, onSettingsChanged }) {
                 isTableTopMode: !settings.isTableTopMode,
               })
             }
-          />
-        </div>
-        <div className="flex justify-between text-blue-400 w-full my-4">
-          <span className="font-sspRegular font-bold text-gray-400">
-            Move Takeback
-          </span>
-          <input
-            type="checkbox"
-            class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75"
-            checked={false}
           />
         </div>
       </StyledModal>
