@@ -64,7 +64,7 @@ function MainMenu({ onScreenSet }) {
         false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
       } bg-blue-300 flex flex-col`}
     >
-      <dix className="mx-8">
+      <div className="mx-8">
         <MenuButton text="solo" icon={singlePlayerIcon} />
         <MenuButton text="online" icon={multiPlayerIcon} />
         <MenuButton
@@ -72,7 +72,7 @@ function MainMenu({ onScreenSet }) {
           icon={multiPlayerIcon}
           onClick={() => onScreenSet(TABLETOP)}
         />
-      </dix>
+      </div>
     </div>
   );
 }
