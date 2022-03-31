@@ -4,13 +4,12 @@ import { shuffle, take } from "lodash";
 import BoardHeader from "../components/BoardHeader";
 import BoardFooter from "../components/BoardFooter";
 
-import { getLegalMoveSpots, calculateScore } from "../util";
+import { generateTileSet, getLegalMoveSpots, calculateScore } from "../util";
 
 // https://www.svgrepo.com/
 
 import Tile from "../components/Tile";
 import BankTile from "../components/BankTile";
-import { COLORS, ANIMALS } from "../constants";
 
 function generateInitialBoard() {
   const board = [];
@@ -26,23 +25,6 @@ function generateInitialBoard() {
   }
 
   return board;
-}
-
-function generateTileSet() {
-  const tileSet = {};
-  let counter = 1;
-
-  COLORS.forEach((color) => {
-    ANIMALS.forEach((animal) => {
-      tileSet[counter] = {
-        animal,
-        color,
-        id: counter,
-      };
-      counter++;
-    });
-  });
-  return tileSet;
 }
 
 // the entire set of tiles. 36 of them.

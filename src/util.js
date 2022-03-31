@@ -1,3 +1,22 @@
+import { COLORS, ANIMALS } from "./constants";
+
+export function generateTileSet() {
+  const tileSet = {};
+  let counter = 1;
+
+  COLORS.forEach((color) => {
+    ANIMALS.forEach((animal) => {
+      tileSet[counter] = {
+        animal,
+        color,
+        id: counter,
+      };
+      counter++;
+    });
+  });
+  return tileSet;
+}
+
 export function getLegalMoveSpots(board, boardSpot) {
   const legalMoves = [];
 
