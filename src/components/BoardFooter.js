@@ -1,7 +1,7 @@
 import { useState } from "react";
 import StyledModal from "./StyledModal";
 
-export default function BoardFooter({ bankSize, settings, onSettingsChanged }) {
+export default function BoardFooter({ bankSize, settings, onSettingsChanged, onConfirmMove, onCancelMove }) {
   const [isBoardSettingsOpen, setIsBoardSettingsOpen] = useState(false);
 
   return (
@@ -23,9 +23,18 @@ export default function BoardFooter({ bankSize, settings, onSettingsChanged }) {
         </svg>
         <p className="font-fancy mx-1">{bankSize}</p>
       </div>
-      <button className="border-2 border-white rounded-md py-1 font-fancy text-white flex-1 mx-12 hover:opacity-75">
-        DONE
-      </button>
+      <div className="flex flex-1">
+        <button onClick={onCancelMove} className="border-2 border-red-300 rounded-md py-1 font-fancy text-red-300 flex-1 mx-8 hover:opacity-75 flex justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <button onClick={onConfirmMove} className="border-2 border-green-300 rounded-md py-1 font-fancy text-green-300 flex-1 mx-8 hover:opacity-75 flex justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </button>
+      </div>
       <button onClick={() => setIsBoardSettingsOpen(true)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

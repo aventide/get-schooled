@@ -239,6 +239,8 @@ function GameBoard({ onBack }) {
             bankSize={bank.length}
             settings={boardSettings}
             onSettingsChanged={(newSettings) => setBoardSettings(newSettings)}
+            onConfirmMove={() => {}}
+            onCancelMove={() => {}}
           />
         </div>
       </div>
