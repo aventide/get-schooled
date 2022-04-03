@@ -36,6 +36,7 @@ function GameBoard({ onBack }) {
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
+  const [hasPlaced, setHasPlaced] = useState(false);
   const [bank, setBank] = useState(shuffle(Object.values(tileSet)));
   const [availableBank, setAvailableBank] = useState([]);
   const [legalMoveSpots, setLegalMoveSpots] = useState([]);
@@ -53,6 +54,14 @@ function GameBoard({ onBack }) {
     Math.random() < 0.5 ? "animals" : "colors"
   );
 
+  const [actionSequence, setActionSequence] = useState([
+    {
+      board,
+      bank,
+      turnFor,
+    },
+  ]);
+
   useEffect(() => {
     setAvailableBank(take(bank, 6));
   }, [bank]);
@@ -62,14 +71,25 @@ function GameBoard({ onBack }) {
       animal: calculateScore(tileSet, board, "animal"),
       color: calculateScore(tileSet, board, "color"),
     });
-  }, [hasMoved, turnFor, board]);
+  }, [board]);
+
+  useEffect(() => {
+    if (hasPlaced && !boardSettings.isConfirmMovesMode) {
+      toggleTurnFor();
+    }
+  }, [hasPlaced]);
 
   function toggleTurnFor() {
     setTurnFor(turnFor === "colors" ? "animals" : "colors");
     setHasMoved(false);
+    setHasPlaced(false);
   }
 
   function handlePlaceTile(x, y) {
+    if (hasPlaced) {
+      return;
+    }
+
     // addressed column-first
     const spotToPlace = board[y][x];
     const isSpotOccupied = spotToPlace["occupyingTile"];
@@ -84,7 +104,9 @@ function GameBoard({ onBack }) {
     const isDoingLegalMove = !isMoving || isLegalMove;
 
     if (targetTile && !isSpotOccupied && isDoingLegalMove) {
-      const newBoard = board;
+      // @todo I hate this so much. Let's use an immutability library perhaps?
+      const newBoard = JSON.parse(JSON.stringify(board));
+      let newBank = JSON.parse(JSON.stringify(bank));
 
       // delete any duplicates of tiles, i.e. in a tile move
       const alreadyPlacedTargetTile = newBoard
@@ -103,11 +125,16 @@ function GameBoard({ onBack }) {
       setLegalMoveSpots([]);
 
       if (!isMoving) {
-        toggleTurnFor();
-        setBank(bank.filter((item) => item.id !== targetTile));
+        newBank = bank.filter((item) => item.id !== targetTile);
+        setBank(newBank);
+        setHasPlaced(true);
       } else {
         setHasMoved(true);
       }
+      setActionSequence([
+        ...actionSequence,
+        { board: newBoard, bank: newBank, turnFor },
+      ]);
     }
   }
 
@@ -118,6 +145,10 @@ function GameBoard({ onBack }) {
   }
 
   function handleSelectTile(id) {
+    if (hasPlaced) {
+      return;
+    }
+
     setIsMoving(false);
     setLegalMoveSpots([]);
 
@@ -139,7 +170,25 @@ function GameBoard({ onBack }) {
     }
   }
 
+  function handleConfirmAction() {
+    toggleTurnFor();
+  }
+
+  function handleCancelAction() {
+    const newActionSequence = actionSequence.slice(0, -1);
+
+    setBoard(newActionSequence[newActionSequence.length - 1].board);
+    setBank(newActionSequence[newActionSequence.length - 1].bank);
+    if (!(hasMoved && hasPlaced)) {
+      setHasMoved(false);
+    }
+    setHasPlaced(false);
+    setActionSequence(newActionSequence);
+  }
+
   const { isTableTopMode } = boardSettings;
+
+  console.log(actionSequence);
 
   return (
     <>
@@ -239,8 +288,10 @@ function GameBoard({ onBack }) {
             bankSize={bank.length}
             settings={boardSettings}
             onSettingsChanged={(newSettings) => setBoardSettings(newSettings)}
-            onConfirmMove={() => {}}
-            onCancelMove={() => {}}
+            hasMoved={hasMoved}
+            hasPlaced={hasPlaced}
+            onConfirmMove={handleConfirmAction}
+            onCancelMove={handleCancelAction}
           />
         </div>
       </div>
