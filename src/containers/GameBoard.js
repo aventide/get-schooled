@@ -77,7 +77,7 @@ function GameBoard({ onBack }) {
     if (hasPlaced && !boardSettings.isConfirmMovesMode) {
       toggleTurnFor();
     }
-  }, [hasPlaced]);
+  }, [hasPlaced, boardSettings.isConfirmMovesMode]);
 
   function toggleTurnFor() {
     setTurnFor(turnFor === "colors" ? "animals" : "colors");
@@ -178,6 +178,8 @@ function GameBoard({ onBack }) {
     const newActionSequence = actionSequence.slice(0, -1);
 
     setBoard(newActionSequence[newActionSequence.length - 1].board);
+
+    // @todo we need to prevent seeing the newly-drawn bank tile cause that's cheating to just undo to see it
     setBank(newActionSequence[newActionSequence.length - 1].bank);
     if (!(hasMoved && hasPlaced)) {
       setHasMoved(false);
@@ -187,8 +189,6 @@ function GameBoard({ onBack }) {
   }
 
   const { isTableTopMode } = boardSettings;
-
-  console.log(actionSequence);
 
   return (
     <>

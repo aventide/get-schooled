@@ -1,4 +1,3 @@
-import { has } from "lodash";
 import { useState } from "react";
 import StyledModal from "./StyledModal";
 
@@ -33,11 +32,14 @@ export default function BoardFooter({
         <p className="font-fancy mx-1">{bankSize}</p>
       </div>
       {settings.isConfirmMovesMode && (
-        <div className="flex flex-1">
-          {(hasPlaced || hasMoved) && (
+        <div className="flex flex-1 text-white">
+          {(hasMoved || hasPlaced) && (
             <button
               onClick={onCancelMove}
-              className="border-2 border-red-300 rounded-md py-1 font-fancy text-red-300 flex-1 mx-8 hover:opacity-75 flex justify-center"
+              className={`bg-red-300 rounded-md py-1 font-fancy flex-1 ${
+                hasPlaced ? "ml-4 mr-2" : "mx-4"
+              } hover:opacity-75 flex justify-center`}
+              disabled={!hasMoved && !hasPlaced}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +60,8 @@ export default function BoardFooter({
           {hasPlaced && (
             <button
               onClick={onConfirmMove}
-              className="border-2 border-green-300 rounded-md py-1 font-fancy text-green-300 flex-1 mx-8 hover:opacity-75 flex justify-center"
+              className="bg-green-300 rounded-md py-1 font-fancy flex-1 mr-4 ml-2 hover:opacity-75 flex justify-center"
+              disabled={!hasPlaced}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
