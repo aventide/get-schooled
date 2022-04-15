@@ -65,7 +65,7 @@ const multiPlayerIcon = (
 
 function Version({ number }) {
   return (
-    <div className="fixed bottom-0 w-screen my-4 flex justify-center font-fancy text-white">
+    <div className="my-4 flex justify-center font-fancy text-white">
       <a
         href="https://github.com/misterlocations/get-schooled"
         className="underline underline-offset-4 decoration-2 decoration-dashed
@@ -84,7 +84,7 @@ function MainMenu({ onScreenSet }) {
         false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
       } bg-blue-300 flex flex-col`}
     >
-      <div className="w-full flex justify-center my-4">
+      <div className="flex justify-center my-4">
         <span className="font-fancy text-white text-3xl">Get Schooled!</span>
       </div>
       <div className="mx-8 h-full flex flex-col justify-center">
