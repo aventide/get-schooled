@@ -1,7 +1,7 @@
-export default function MenuButton({ icon, text, onClick }) {
+export default function LesserMenuButton({ icon, text, onClick }) {
   return (
     <div
-      className="bg-blue-500 h-4 my-1 py-6 font-fancy text-blue-100 rounded-md flex items-center relative cursor-pointer hover:opacity-75 select-none"
+      className=" border-2 border-blue-500 bg-blue-300 h-4 my-1 py-5 font-fancy text-blue-500 rounded-md flex items-center relative cursor-pointer hover:opacity-75 select-none"
       onClick={onClick}
     >
       <div className="absolute left-4">{icon}</div>
