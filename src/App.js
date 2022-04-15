@@ -57,6 +57,13 @@ const multiPlayerIcon = (
   </svg>
 );
 
+function Version({ number }) {
+  return <div className="fixed w-screen bottom-0 my-4 flex justify-center font-fancy text-white">
+   <a href="https://github.com/misterlocations/get-schooled" className="underline underline-offset-4 decoration-2 decoration-dashed
+">Version {number}</a>
+  </div>
+}
+
 function MainMenu({ onScreenSet }) {
   return (
     <div
@@ -73,6 +80,7 @@ function MainMenu({ onScreenSet }) {
           onClick={() => onScreenSet(TABLETOP)}
         />
       </div>
+      <Version number="0.1.0" />
     </div>
   );
 }
