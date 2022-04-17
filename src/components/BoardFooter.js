@@ -14,7 +14,7 @@ export default function BoardFooter({
 
   return (
     <div className="flex justify-between mx-2 my-4 text-white">
-      <div className="flex items-center">
+      <div className="flex items-center bg-blue-400 rounded-md px-1 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-8 w-8"
@@ -81,7 +81,7 @@ export default function BoardFooter({
           )}
         </div>
       )}
-      <button onClick={() => setIsBoardSettingsOpen(true)}>
+      <button onClick={() => setIsBoardSettingsOpen(true)} className="bg-blue-400 rounded-md px-1 hover:opacity-75">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-8 w-8 hover:opacity-75"
