@@ -68,7 +68,7 @@ function Version({ number }) {
     <div className="my-4 flex justify-center font-fancy text-white">
       <a
         href="https://github.com/misterlocations/get-schooled"
-        className="underline underline-offset-4 decoration-2 decoration-dashed
+        className="underline underline-offset-2 decoration-4
 "
       >
         Version {number}
