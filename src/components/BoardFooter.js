@@ -17,7 +17,7 @@ export default function BoardFooter({
       <div className="flex items-center bg-blue-400 rounded-md px-1 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8"
+          className="h-10 w-10 p-1"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -38,12 +38,12 @@ export default function BoardFooter({
               onClick={onCancelMove}
               className={`bg-red-300 rounded-md py-1 font-fancy flex-1 ${
                 hasPlaced ? "ml-4 mr-2" : "mx-4"
-              } hover:opacity-75 flex justify-center`}
+              } hover:opacity-75 flex justify-center items-center`}
               disabled={!hasMoved && !hasPlaced}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-8 w-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -60,12 +60,12 @@ export default function BoardFooter({
           {hasPlaced && (
             <button
               onClick={onConfirmMove}
-              className="bg-green-300 rounded-md py-1 font-fancy flex-1 mr-4 ml-2 hover:opacity-75 flex justify-center"
+              className="bg-green-300 rounded-md py-1 font-fancy flex-1 mr-4 ml-2 hover:opacity-75 flex justify-center items-center"
               disabled={!hasPlaced}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-8 w-8"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -81,10 +81,10 @@ export default function BoardFooter({
           )}
         </div>
       )}
-      <button onClick={() => setIsBoardSettingsOpen(true)} className="bg-blue-400 rounded-md px-1 hover:opacity-75">
+      <button onClick={() => setIsBoardSettingsOpen(true)} className="bg-blue-400 rounded-md hover:opacity-75">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 hover:opacity-75"
+          className="h-10 w-10 p-1 hover:opacity-75"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

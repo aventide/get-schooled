@@ -1,15 +1,14 @@
 import { useState } from "react";
 import GameBoard from "./containers/GameBoard";
+import SoloSelectScreen from "./containers/SoloSelectScreen"
 import MenuButton from "./components/MenuButton";
 import LesserMenuButton from "./components/LesserMenuButton";
 
 const NONE_SELECTED = "none_selected";
 const MAIN_MENU = "main_menu";
-const SOLO = "solo";
+const SOLO_SELECT = "solo_select";
 const ONLINE = "online";
 const TABLETOP = "tabletop";
-
-const availableGameModes = [SOLO, ONLINE, TABLETOP];
 
 export default function App() {
   const [gameScreen, setGameScreen] = useState(MAIN_MENU);
@@ -19,6 +18,9 @@ export default function App() {
       {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
       {gameScreen === TABLETOP && (
         <GameBoard onBack={() => setGameScreen(MAIN_MENU)} />
+      )}
+      {gameScreen === SOLO_SELECT && (
+        <SoloSelectScreen onBack={() => setGameScreen(MAIN_MENU)} />
       )}
     </div>
   );
@@ -80,15 +82,15 @@ function Version({ number }) {
 function MainMenu({ onScreenSet }) {
   return (
     <div
-      className={`w-full h-screen ${
-        false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
-      } bg-blue-300 flex flex-col`}
+      className={`w-full h-screen ${false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
+        } bg-blue-300 flex flex-col`}
     >
       <div className="flex justify-center my-4">
         <span className="font-fancy text-white text-3xl">Get Schooled!</span>
       </div>
       <div className="mx-8 h-full flex flex-col justify-center">
-        <MenuButton text="solo" icon={singlePlayerIcon} />
+        <MenuButton text="solo" icon={singlePlayerIcon} onClick={() => onScreenSet(SOLO_SELECT)}
+        />
         <MenuButton text="online" icon={multiPlayerIcon} />
         <MenuButton
           text="tabletop"
