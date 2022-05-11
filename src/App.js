@@ -1,6 +1,6 @@
 import { useState } from "react";
 import GameBoard from "./containers/GameBoard";
-import SoloSelectScreen from "./containers/SoloSelectScreen"
+import SoloSelectScreen from "./containers/SoloSelectScreen";
 import MenuButton from "./components/MenuButton";
 import LesserMenuButton from "./components/LesserMenuButton";
 
@@ -82,14 +82,18 @@ function Version({ number }) {
 function MainMenu({ onScreenSet }) {
   return (
     <div
-      className={`w-full h-screen ${false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
-        } bg-blue-300 flex flex-col`}
+      className={`w-full h-screen ${
+        false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
+      } bg-blue-300 flex flex-col`}
     >
       <div className="flex justify-center my-4">
         <span className="font-fancy text-white text-3xl">Get Schooled!</span>
       </div>
       <div className="mx-8 h-full flex flex-col justify-center">
-        <MenuButton text="solo" icon={singlePlayerIcon} onClick={() => onScreenSet(SOLO_SELECT)}
+        <MenuButton
+          text="solo"
+          icon={singlePlayerIcon}
+          onClick={() => onScreenSet(SOLO_SELECT)}
         />
         <MenuButton text="online" icon={multiPlayerIcon} />
         <MenuButton

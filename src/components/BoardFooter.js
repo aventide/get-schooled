@@ -81,7 +81,10 @@ export default function BoardFooter({
           )}
         </div>
       )}
-      <button onClick={() => setIsBoardSettingsOpen(true)} className="bg-blue-400 rounded-md hover:opacity-75">
+      <button
+        onClick={() => setIsBoardSettingsOpen(true)}
+        className="bg-blue-400 rounded-md hover:opacity-75"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-10 w-10 p-1 hover:opacity-75"

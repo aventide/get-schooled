@@ -263,22 +263,27 @@ function GameBoard({ onBack }) {
           className={`w-full border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}
         >
           <div className="grid grid-cols-6 grid-rows-1 gap-1">
-            {availableBank.map((abItem) => (
+            {availableBank.map((abItem, abIndex) => (
               <div
                 className={
                   abItem.id !== targetTile ? "" : "bg-orange-200 rounded-md"
                 }
+                key={abItem.id}
               >
                 <div
                   className={
                     abItem.id !== targetTile ? "" : "animate-pulse-slow"
                   }
                 >
-                  <BankTile
-                    animal={abItem.animal}
-                    color={abItem.color}
-                    onSelect={() => handleSelectTile(abItem.id)}
-                  />
+                  {!hasPlaced || abIndex !== 5 ? (
+                    <BankTile
+                      animal={abItem.animal}
+                      color={abItem.color}
+                      onSelect={() => handleSelectTile(abItem.id)}
+                    />
+                  ) : (
+                    <BankTile mystery />
+                  )}
                 </div>
               </div>
             ))}
