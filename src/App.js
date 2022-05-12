@@ -3,15 +3,18 @@ import GameBoard from "./containers/GameBoard";
 import SoloSelectScreen from "./containers/SoloSelectScreen";
 import MenuButton from "./components/MenuButton";
 import LesserMenuButton from "./components/LesserMenuButton";
+import { DIFFICULTY_IGNORAMUS } from "./constants";
 
 const NONE_SELECTED = "none_selected";
 const MAIN_MENU = "main_menu";
+const SOLO = "solo";
 const SOLO_SELECT = "solo_select";
 const ONLINE = "online";
 const TABLETOP = "tabletop";
 
 export default function App() {
   const [gameScreen, setGameScreen] = useState(MAIN_MENU);
+  const [soloDifficulty, setSoloDifficulty] = useState(DIFFICULTY_IGNORAMUS);
 
   return (
     <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center">
@@ -20,7 +23,19 @@ export default function App() {
         <GameBoard onBack={() => setGameScreen(MAIN_MENU)} />
       )}
       {gameScreen === SOLO_SELECT && (
-        <SoloSelectScreen onBack={() => setGameScreen(MAIN_MENU)} />
+        <SoloSelectScreen
+          onBack={() => setGameScreen(MAIN_MENU)}
+          onSelectDifficulty={(gameDifficulty) => {
+            setSoloDifficulty(gameDifficulty);
+            setGameScreen(SOLO);
+          }}
+        />
+      )}
+      {gameScreen === SOLO && (
+        <GameBoard
+          onBack={() => setGameScreen(MAIN_MENU)}
+          onTurnTransition={() => alert("computer moves now!")}
+        />
       )}
     </div>
   );

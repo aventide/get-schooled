@@ -1,6 +1,6 @@
 import MenuButton from "../components/MenuButton";
 
-import { IGNORAMUS, VERY_EASY } from "../constants";
+import { DIFFICULTY_IGNORAMUS, DIFFICULTY_VERY_EASY } from "../constants";
 
 export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
   return (
@@ -30,7 +30,7 @@ export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
           Solo Mode
         </span>
       </div>
-      <div className="mx-8 h-full flex flex-col justify-center items">
+      <div className="mx-8 h-full flex flex-col justify-center">
         <div>
           <p className="mb-4 font-fancy text-xl text-center flex-1 text-white">
             computer level:
@@ -38,12 +38,12 @@ export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
           <MenuButton
             text="ignoramus"
             icon={null}
-            onClick={() => onSelectDifficulty(IGNORAMUS)}
+            onClick={() => onSelectDifficulty(DIFFICULTY_IGNORAMUS)}
           />
           <MenuButton
             text="very easy"
             icon={null}
-            onClick={() => onSelectDifficulty(VERY_EASY)}
+            onClick={() => onSelectDifficulty(DIFFICULTY_VERY_EASY)}
           />
         </div>
       </div>

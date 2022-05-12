@@ -18,5 +18,5 @@ export const ANIMALS = [
 
 // difficulty levels
 
-export const IGNORAMUS = "ignoramus";
-export const VERY_EASY = "very_easy";
+export const DIFFICULTY_IGNORAMUS = "ignoramus";
+export const DIFFICULTY_VERY_EASY = "very_easy";

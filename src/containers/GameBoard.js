@@ -31,7 +31,7 @@ function generateInitialBoard() {
 // generate by fitting every animal/color combo, and setting a unique id
 const tileSet = generateTileSet();
 
-function GameBoard({ onBack }) {
+function GameBoard({ onBack, onTurnTransition }) {
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
@@ -83,6 +83,9 @@ function GameBoard({ onBack }) {
     setTurnFor(turnFor === "colors" ? "animals" : "colors");
     setHasMoved(false);
     setHasPlaced(false);
+    if (onTurnTransition) {
+      onTurnTransition();
+    }
   }
 
   function handlePlaceTile(x, y) {
