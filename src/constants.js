@@ -15,3 +15,8 @@ export const ANIMALS = [
   "turtle",
   "fish",
 ];
+
+// difficulty levels
+
+export const IGNORAMUS = "ignoramus";
+export const VERY_EASY = "very_easy";
