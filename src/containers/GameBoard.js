@@ -77,7 +77,7 @@ function GameBoard({ onBack, onTurnTransition }) {
     if (hasPlaced && !boardSettings.isConfirmMovesMode) {
       toggleTurnFor();
     }
-  }, [hasPlaced, boardSettings.isConfirmMovesMode]);
+  }, [hasPlaced, boardSettings.isConfirmMovesMode]); // eslint-disable-line
 
   function toggleTurnFor() {
     setTurnFor(turnFor === "colors" ? "animals" : "colors");

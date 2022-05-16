@@ -20,3 +20,8 @@ export const ANIMALS = [
 
 export const DIFFICULTY_IGNORAMUS = "ignoramus";
 export const DIFFICULTY_VERY_EASY = "very_easy";
+
+// match selections
+
+export const MATCH_ANIMALS = "match_animals";
+export const MATCH_COLORS = "match_colors";
