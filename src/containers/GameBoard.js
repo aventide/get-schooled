@@ -80,11 +80,20 @@ function GameBoard({ onBack, onTurnTransition }) {
   }, [hasPlaced, boardSettings.isConfirmMovesMode]); // eslint-disable-line
 
   function toggleTurnFor() {
-    setTurnFor(turnFor === "colors" ? "animals" : "colors");
+    const nextTurnFor = turnFor === "colors" ? "animals" : "colors";
+
+    setTurnFor(nextTurnFor);
     setHasMoved(false);
     setHasPlaced(false);
     if (onTurnTransition) {
-      onTurnTransition();
+      const { newBoard, newBank, newTurnFor } = onTurnTransition({
+        board,
+        bank,
+        turnFor: nextTurnFor,
+      });
+      setBoard(newBoard);
+      setBank(newBank);
+      setTurnFor(newTurnFor);
     }
   }
 
@@ -181,9 +190,8 @@ function GameBoard({ onBack, onTurnTransition }) {
     const newActionSequence = actionSequence.slice(0, -1);
 
     setBoard(newActionSequence[newActionSequence.length - 1].board);
-
-    // @todo we need to prevent seeing the newly-drawn bank tile cause that's cheating to just undo to see it
     setBank(newActionSequence[newActionSequence.length - 1].bank);
+
     if (!(hasMoved && hasPlaced)) {
       setHasMoved(false);
     }
