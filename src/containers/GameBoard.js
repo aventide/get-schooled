@@ -86,14 +86,20 @@ function GameBoard({ onBack, onTurnTransition }) {
     setHasMoved(false);
     setHasPlaced(false);
     if (onTurnTransition) {
-      const { newBoard, newBank, newTurnFor } = onTurnTransition({
-        board,
-        bank,
-        turnFor: nextTurnFor,
-      });
-      setBoard(newBoard);
-      setBank(newBank);
-      setTurnFor(newTurnFor);
+      setTimeout(() => {
+        const { newBoard, newBank, newTurnFor } = onTurnTransition({
+          board,
+          bank,
+          turnFor: nextTurnFor,
+        });
+        setBoard(newBoard);
+        setBank(newBank);
+        setTurnFor(newTurnFor);
+        setActionSequence([
+          ...actionSequence,
+          { board: newBoard, bank: newBank, turnFor: newTurnFor },
+        ]);
+      }, 1000);
     }
   }
 
