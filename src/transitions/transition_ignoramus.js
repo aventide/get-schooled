@@ -2,37 +2,30 @@ import { sample, take } from "lodash";
 
 function getRandomEmptySpot(board) {
   const emptySpots = board.flat().filter((item) => !item.occupyingTile);
-  const randomTile = sample(emptySpots);
-  return randomTile;
+  return sample(emptySpots);
 }
 
 function getRandomAvailableBankTile(bank) {
   const availableBank = take(bank, 6);
-  return bank[(Math.floor(Math.random() * 10) % availableBank.length) + 1];
+  return sample(availableBank);
 }
 
 export default function transition_ignoramus({ board, bank, turnFor }) {
-  let newBoard = board;
-  let newBank = bank;
+  const newBoard = JSON.parse(JSON.stringify(board));
+  const flattenedBoard = newBoard.flat();
 
-  const boardCopy = JSON.parse(JSON.stringify(board));
-  const flattenedBoard = boardCopy.flat();
+  // by default, choose a random bank tile
+  let targetBankTile = getRandomAvailableBankTile(bank);
 
-  // if this is the first move
+  // if this is the first move, just place a random bank tile on a random spot
   if (true || !flattenedBoard.length) {
-    // first, choose a random bank tile
-    const targetBankTile = getRandomAvailableBankTile(bank);
     const randomSpot = getRandomEmptySpot(board);
-
-    // place it somewhere random
-    boardCopy[randomSpot.y][randomSpot.x].occupyingTile = targetBankTile.id;
-    newBoard = boardCopy;
-    newBank = bank.filter((item) => item.id !== targetBankTile.id);
+    newBoard[randomSpot.y][randomSpot.x].occupyingTile = targetBankTile.id;
   }
 
   return {
     newBoard,
-    newBank,
+    newBank: bank.filter((item) => item.id !== targetBankTile.id),
     newTurnFor: turnFor === "colors" ? "animals" : "colors",
   };
 }
