@@ -68,7 +68,17 @@ export function getLegalMoveSpots(board, boardSpot) {
 }
 
 export function calculateScore(tileSet, board, type) {
+  const matchGroups = getMatchGroups(tileSet, board, type);
+  return matchGroups.reduce(
+    (totalScore, matchGroup) =>
+      totalScore + getScoreForMatches(matchGroup.length),
+    0
+  );
+}
+
+export function getMatchGroups(tileSet, board, type) {
   const boardCopy = JSON.parse(JSON.stringify(board));
+  const matchGroups = [];
   let filteredBoard = boardCopy
     .flat()
     .filter((item) => item.occupyingTile)
@@ -80,19 +90,18 @@ export function calculateScore(tileSet, board, type) {
         id: item.occupyingTile,
       };
     });
-  let score = 0;
 
   while (filteredBoard.length > 0) {
     const tileToEval = filteredBoard[0];
 
     if (filteredBoard.length > 0) {
       const matches = getMatches(tileSet, filteredBoard, tileToEval, type);
-      score += getScoreForMatches(matches.size);
+      matchGroups.push(Array.from(matches));
       filteredBoard = filteredBoard.filter((item) => !matches.has(item.id));
     }
   }
 
-  return score;
+  return matchGroups;
 }
 
 function getMatches(tileSet, board, spot, type) {
