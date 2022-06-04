@@ -1,4 +1,9 @@
-import { getScoreForMatches, generateTileSet } from "../util";
+import {
+  getAdjacentTiles,
+  getScoreForMatches,
+  generateTileSet,
+  generateInitialBoard,
+} from "../util";
 
 describe("util functions", () => {
   describe("generateTileSet util", () => {
@@ -187,6 +192,46 @@ describe("util functions", () => {
 
     it("tileset generates properly", () => {
       expect(generateTileSet()).toEqual(expectedTileSet);
+    });
+  });
+
+  describe("getAdjacentTiles util", () => {
+    it("all adjacent tiles - middle of board", () => {
+      const expectedAdjacentTiles = [
+        { x: 2, y: 1 },
+        { x: 2, y: 3 },
+        { x: 1, y: 2 },
+        { x: 3, y: 2 },
+      ];
+      const board = generateInitialBoard();
+      const boardBuffer = board.flat();
+      expect(getAdjacentTiles(boardBuffer, { x: 2, y: 2 })).toEqual(
+        expectedAdjacentTiles
+      );
+    });
+    it("all adjacent tiles - top edge of board", () => {
+      const expectedAdjacentTiles = [
+        { x: 4, y: 1 },
+        { x: 3, y: 0 },
+        { x: 5, y: 0 },
+      ];
+      const board = generateInitialBoard();
+      const boardBuffer = board.flat();
+      expect(getAdjacentTiles(boardBuffer, { x: 4, y: 0 })).toEqual(
+        expectedAdjacentTiles
+      );
+    });
+    it("all adjacent tiles - left edge of board", () => {
+      const expectedAdjacentTiles = [
+        { x: 0, y: 2 },
+        { x: 0, y: 4 },
+        { x: 1, y: 3 },
+      ];
+      const board = generateInitialBoard();
+      const boardBuffer = board.flat();
+      expect(getAdjacentTiles(boardBuffer, { x: 0, y: 3 })).toEqual(
+        expectedAdjacentTiles
+      );
     });
   });
 

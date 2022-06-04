@@ -17,6 +17,22 @@ export function generateTileSet() {
   return tileSet;
 }
 
+export function generateInitialBoard() {
+  const board = [];
+  for (let y = 0; y < 6; y++) {
+    const row = [];
+    for (let x = 0; x < 6; x++) {
+      row.push({
+        x,
+        y,
+      });
+    }
+    board.push(row);
+  }
+
+  return board;
+}
+
 export function getLegalMoveSpots(board, boardSpot) {
   const legalMoves = [];
 
@@ -108,7 +124,7 @@ export function getMatchGroups(tileSet, board, matchType) {
 
 // get adjacent tiles within the board for a given tile
 // check up, down, left, right
-function getAdjacentTiles(board, tile) {
+export function getAdjacentTiles(board, tile) {
   const upCheck = board.find(
     (boardTile) => boardTile.x === tile.x && boardTile.y === tile.y - 1
   );

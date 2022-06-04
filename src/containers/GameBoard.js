@@ -4,28 +4,17 @@ import { shuffle, take } from "lodash";
 import BoardHeader from "../components/BoardHeader";
 import BoardFooter from "../components/BoardFooter";
 
-import { generateTileSet, getLegalMoveSpots, calculateScore } from "../util";
+import {
+  generateInitialBoard,
+  generateTileSet,
+  getLegalMoveSpots,
+  calculateScore,
+} from "../util";
 
 // https://www.svgrepo.com/
 
 import Tile from "../components/Tile";
 import BankTile from "../components/BankTile";
-
-function generateInitialBoard() {
-  const board = [];
-  for (let y = 0; y < 6; y++) {
-    const row = [];
-    for (let x = 0; x < 6; x++) {
-      row.push({
-        x,
-        y,
-      });
-    }
-    board.push(row);
-  }
-
-  return board;
-}
 
 // the entire set of tiles. 36 of them.
 // generate by fitting every animal/color combo, and setting a unique id
