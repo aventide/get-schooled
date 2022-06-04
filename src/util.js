@@ -154,7 +154,7 @@ function getMatches(tileSet, board, spot, matchType) {
   return matchPool;
 }
 
-function getScoreForMatches(numberOfMatches) {
+export function getScoreForMatches(numberOfMatches) {
   switch (numberOfMatches) {
     case 0:
     case 1:
