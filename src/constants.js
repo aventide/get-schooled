@@ -2,8 +2,8 @@ export const COLORS = [
   "#EAB6BD", // pink
   "#D96E6C", // red
   "#F7DE88", // yellow
-  "#a6d8d8", // green
-  "#53b7df", // blue
+  "#A6D8D8", // green
+  "#53B7DF", // blue
   "#9B9FDA", // purple
 ];
 

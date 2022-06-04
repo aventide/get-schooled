@@ -29,6 +29,7 @@ function generateInitialBoard() {
 
 // the entire set of tiles. 36 of them.
 // generate by fitting every animal/color combo, and setting a unique id
+// @todo honestly make this global. It only gets generated once and it's static.
 const tileSet = generateTileSet();
 
 function GameBoard({ onBack, onTurnTransition }) {

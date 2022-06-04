@@ -41,7 +41,7 @@ export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
           <p className="mb-4 font-fancy text-xl text-center flex-1 text-white">
             match selection:
           </p>
-          <div class="btn-group flex justify-evenly mb-5">
+          <div className="btn-group flex justify-evenly mb-5">
             <SelectionButton
               text="Animals"
               onClick={() => setMatchSelection(MATCH_ANIMALS)}
@@ -64,7 +64,6 @@ export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
             onClick={() => onSelectDifficulty(DIFFICULTY_IGNORAMUS)}
           />
           <MenuButton
-            disabled
             text="very easy"
             icon={null}
             onClick={() => onSelectDifficulty(DIFFICULTY_VERY_EASY)}

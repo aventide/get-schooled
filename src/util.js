@@ -67,8 +67,8 @@ export function getLegalMoveSpots(board, boardSpot) {
   return legalMoves;
 }
 
-export function calculateScore(tileSet, board, type) {
-  const matchGroups = getMatchGroups(tileSet, board, type);
+export function calculateScore(tileSet, board, matchType) {
+  const matchGroups = getMatchGroups(tileSet, board, matchType);
   return matchGroups.reduce(
     (totalScore, matchGroup) =>
       totalScore + getScoreForMatches(matchGroup.length),
@@ -76,7 +76,7 @@ export function calculateScore(tileSet, board, type) {
   );
 }
 
-export function getMatchGroups(tileSet, board, type) {
+export function getMatchGroups(tileSet, board, matchType) {
   const boardCopy = JSON.parse(JSON.stringify(board));
   const matchGroups = [];
   let filteredBoard = boardCopy
@@ -95,18 +95,39 @@ export function getMatchGroups(tileSet, board, type) {
     const tileToEval = filteredBoard[0];
 
     if (filteredBoard.length > 0) {
-      const matches = getMatches(tileSet, filteredBoard, tileToEval, type);
-      matchGroups.push(Array.from(matches));
-      filteredBoard = filteredBoard.filter((item) => !matches.has(item.id));
+      const matches = getMatches(tileSet, filteredBoard, tileToEval, matchType);
+      matchGroups.push(matches);
+      filteredBoard = filteredBoard.filter(
+        (boardItem) => !matches.some((item) => item.id === boardItem.id)
+      );
     }
   }
 
   return matchGroups;
 }
 
-function getMatches(tileSet, board, spot, type) {
-  const compare = tileSet[spot.id][type];
-  const matchPool = new Set([spot.id]);
+// get adjacent tiles within the board for a given tile
+// check up, down, left, right
+function getAdjacentTiles(board, tile) {
+  const upCheck = board.find(
+    (boardTile) => boardTile.x === tile.x && boardTile.y === tile.y - 1
+  );
+  const downCheck = board.find(
+    (boardTile) => boardTile.x === tile.x && boardTile.y === tile.y + 1
+  );
+  const leftCheck = board.find(
+    (boardTile) => boardTile.x === tile.x - 1 && boardTile.y === tile.y
+  );
+  const rightCheck = board.find(
+    (boardTile) => boardTile.x === tile.x + 1 && boardTile.y === tile.y
+  );
+
+  return [upCheck, downCheck, leftCheck, rightCheck].filter((exists) => exists);
+}
+
+function getMatches(tileSet, board, spot, matchType) {
+  const compare = tileSet[spot.id][matchType];
+  const matchPool = [tileSet[spot.id]];
   let checkPool = [spot.id];
 
   while (checkPool.length > 0) {
@@ -115,32 +136,14 @@ function getMatches(tileSet, board, spot, type) {
       (item) => item.id === currentCheckItem
     );
 
-    const upCheck = board.find(
-      (item) =>
-        item.x === currentCheckSquare.x && item.y === currentCheckSquare.y - 1
-    );
-    const downCheck = board.find(
-      (item) =>
-        item.x === currentCheckSquare.x && item.y === currentCheckSquare.y + 1
-    );
-    const leftCheck = board.find(
-      (item) =>
-        item.x === currentCheckSquare.x - 1 && item.y === currentCheckSquare.y
-    );
-    const rightCheck = board.find(
-      (item) =>
-        item.x === currentCheckSquare.x + 1 && item.y === currentCheckSquare.y
-    );
-
-    const checks = [upCheck, downCheck, leftCheck, rightCheck];
+    const checks = getAdjacentTiles(board, currentCheckSquare);
 
     checks.forEach((check) => {
       if (
-        check &&
-        !matchPool.has(check.id) &&
-        tileSet[check.id][type] === compare
+        !matchPool.some((poolItem) => poolItem.id === check.id) &&
+        tileSet[check.id][matchType] === compare
       ) {
-        matchPool.add(check.id);
+        matchPool.push(tileSet[check.id]);
         checkPool.push(check.id);
       }
     });

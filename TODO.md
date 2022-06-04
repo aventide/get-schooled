@@ -6,3 +6,7 @@
 # UI
 
 * Turn history (uses existing actionSequence)
+
+* transition banners like "computer is thinking".
+
+* disable board controls during turn transitions.   

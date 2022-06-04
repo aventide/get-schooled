@@ -111,7 +111,7 @@ function MainMenu({ onScreenSet }) {
           icon={singlePlayerIcon}
           onClick={() => onScreenSet(SOLO_SELECT)}
         />
-        <MenuButton text="online" icon={multiPlayerIcon} disabled/>
+        <MenuButton text="online" icon={multiPlayerIcon} disabled />
         <MenuButton
           text="tabletop"
           icon={multiPlayerIcon}
