@@ -58,8 +58,8 @@ function GameBoard({ onBack, onTurnTransition }) {
 
   useEffect(() => {
     setScores({
-      animal: calculateScore(tileSet, board, "animal"),
-      color: calculateScore(tileSet, board, "color"),
+      animal: calculateScore(board, "animal"),
+      color: calculateScore(board, "color"),
     });
   }, [board]);
 

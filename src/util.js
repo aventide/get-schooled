@@ -17,6 +17,8 @@ export function generateTileSet() {
   return tileSet;
 }
 
+const tileSet = generateTileSet();
+
 export function generateInitialBoard() {
   const board = [];
   for (let y = 0; y < 6; y++) {
@@ -83,8 +85,8 @@ export function getLegalMoveSpots(board, boardSpot) {
   return legalMoves;
 }
 
-export function calculateScore(tileSet, board, matchType) {
-  const matchGroups = getMatchGroups(tileSet, board, matchType);
+export function calculateScore(board, matchType) {
+  const matchGroups = getMatchGroups(board, matchType);
   return matchGroups.reduce(
     (totalScore, matchGroup) =>
       totalScore + getScoreForMatches(matchGroup.length),
@@ -92,7 +94,7 @@ export function calculateScore(tileSet, board, matchType) {
   );
 }
 
-export function getMatchGroups(tileSet, board, matchType) {
+export function getMatchGroups(board, matchType) {
   const boardCopy = JSON.parse(JSON.stringify(board));
   const matchGroups = [];
   let filteredBoard = boardCopy
@@ -109,7 +111,7 @@ export function getMatchGroups(tileSet, board, matchType) {
 
   while (filteredBoard.length > 0) {
     const tileToEval = filteredBoard[0];
-    const matches = getMatches(tileSet, filteredBoard, tileToEval, matchType);
+    const matches = getMatches(filteredBoard, tileToEval, matchType);
     matchGroups.push(matches);
     filteredBoard = filteredBoard.filter(
       (boardItem) => !matches.some((item) => item.id === boardItem.id)
@@ -138,7 +140,7 @@ export function getAdjacentSpaces(board, tile) {
   return [upCheck, downCheck, leftCheck, rightCheck].filter((exists) => exists);
 }
 
-export function getMatches(tileSet, board, spot, matchType) {
+export function getMatches(board, spot, matchType) {
   const compare = tileSet[spot.id][matchType];
   const matchPool = [tileSet[spot.id]];
   let checkPool = [spot.id];

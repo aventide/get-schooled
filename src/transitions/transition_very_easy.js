@@ -1,9 +1,6 @@
 import { sample, take, uniqBy } from "lodash";
 
-import { getMatchGroups, generateTileSet } from "../util";
-
-// @todo honestly make this global. It only gets generated once and it's static.
-const tileSet = generateTileSet();
+import { getMatchGroups } from "../util";
 
 function getRandomEmptySpot(boardBuffer) {
   const emptySpots = boardBuffer.filter((item) => !item.occupyingTile);
@@ -40,7 +37,7 @@ export default function transition_very_easy({ board, bank, turnFor }) {
   const newBoard = JSON.parse(JSON.stringify(board));
   const boardBuffer = newBoard.flat();
   const matchType = turnFor === "animals" ? "animal" : "color";
-  const matchGroups = getMatchGroups(tileSet, boardBuffer, matchType);
+  const matchGroups = getMatchGroups(boardBuffer, matchType);
 
   // // by default, choose a random bank tile
   let targetBankTile = getRandomAvailableBankTile(bank);

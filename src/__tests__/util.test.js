@@ -278,12 +278,7 @@ describe("util functions", () => {
 
       // @todo looks like x and y can be anything... only id matters?
       expect(
-        getMatches(
-          generateTileSet(),
-          boardBufferMappedToIds,
-          { x: 1, y: 3, id: 27 },
-          "color"
-        )
+        getMatches(boardBufferMappedToIds, { x: 1, y: 3, id: 27 }, "color")
       ).toEqual(expectedMatched);
     });
 
