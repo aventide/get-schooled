@@ -99,24 +99,21 @@ export function getMatchGroups(tileSet, board, matchType) {
     .flat()
     .filter((item) => item.occupyingTile)
     .map((item) => {
-      const { x, y } = item;
+      const { x, y, occupyingTile } = item;
       return {
         x,
         y,
-        id: item.occupyingTile,
+        id: occupyingTile,
       };
     });
 
   while (filteredBoard.length > 0) {
     const tileToEval = filteredBoard[0];
-
-    if (filteredBoard.length > 0) {
-      const matches = getMatches(tileSet, filteredBoard, tileToEval, matchType);
-      matchGroups.push(matches);
-      filteredBoard = filteredBoard.filter(
-        (boardItem) => !matches.some((item) => item.id === boardItem.id)
-      );
-    }
+    const matches = getMatches(tileSet, filteredBoard, tileToEval, matchType);
+    matchGroups.push(matches);
+    filteredBoard = filteredBoard.filter(
+      (boardItem) => !matches.some((item) => item.id === boardItem.id)
+    );
   }
 
   return matchGroups;
@@ -124,7 +121,7 @@ export function getMatchGroups(tileSet, board, matchType) {
 
 // get adjacent tiles within the board for a given tile
 // check up, down, left, right
-export function getAdjacentTiles(board, tile) {
+export function getAdjacentSpaces(board, tile) {
   const upCheck = board.find(
     (boardTile) => boardTile.x === tile.x && boardTile.y === tile.y - 1
   );
@@ -141,7 +138,7 @@ export function getAdjacentTiles(board, tile) {
   return [upCheck, downCheck, leftCheck, rightCheck].filter((exists) => exists);
 }
 
-function getMatches(tileSet, board, spot, matchType) {
+export function getMatches(tileSet, board, spot, matchType) {
   const compare = tileSet[spot.id][matchType];
   const matchPool = [tileSet[spot.id]];
   let checkPool = [spot.id];
@@ -149,10 +146,10 @@ function getMatches(tileSet, board, spot, matchType) {
   while (checkPool.length > 0) {
     const currentCheckItem = checkPool[0];
     const currentCheckSquare = board.find(
-      (item) => item.id === currentCheckItem
+      (boardItem) => boardItem.id === currentCheckItem
     );
 
-    const checks = getAdjacentTiles(board, currentCheckSquare);
+    const checks = getAdjacentSpaces(board, currentCheckSquare);
 
     checks.forEach((check) => {
       if (

@@ -1,8 +1,9 @@
 import {
-  getAdjacentTiles,
+  getAdjacentSpaces,
   getScoreForMatches,
   generateTileSet,
   generateInitialBoard,
+  getMatches,
 } from "../util";
 
 describe("util functions", () => {
@@ -195,9 +196,9 @@ describe("util functions", () => {
     });
   });
 
-  describe("getAdjacentTiles util", () => {
-    it("all adjacent tiles - middle of board", () => {
-      const expectedAdjacentTiles = [
+  describe("getAdjacentSpaces util", () => {
+    it("all adjacent spaces - middle of board", () => {
+      const expectedAdjacentSpaces = [
         { x: 2, y: 1 },
         { x: 2, y: 3 },
         { x: 1, y: 2 },
@@ -205,34 +206,91 @@ describe("util functions", () => {
       ];
       const board = generateInitialBoard();
       const boardBuffer = board.flat();
-      expect(getAdjacentTiles(boardBuffer, { x: 2, y: 2 })).toEqual(
-        expectedAdjacentTiles
+      expect(getAdjacentSpaces(boardBuffer, { x: 2, y: 2 })).toEqual(
+        expectedAdjacentSpaces
       );
     });
-    it("all adjacent tiles - top edge of board", () => {
-      const expectedAdjacentTiles = [
+    it("all adjacent spaces - top edge of board", () => {
+      const expectedAdjacentSpaces = [
         { x: 4, y: 1 },
         { x: 3, y: 0 },
         { x: 5, y: 0 },
       ];
       const board = generateInitialBoard();
       const boardBuffer = board.flat();
-      expect(getAdjacentTiles(boardBuffer, { x: 4, y: 0 })).toEqual(
-        expectedAdjacentTiles
+      expect(getAdjacentSpaces(boardBuffer, { x: 4, y: 0 })).toEqual(
+        expectedAdjacentSpaces
       );
     });
-    it("all adjacent tiles - left edge of board", () => {
-      const expectedAdjacentTiles = [
+    it("all adjacent spaces - left edge of board", () => {
+      const expectedAdjacentSpaces = [
         { x: 0, y: 2 },
         { x: 0, y: 4 },
         { x: 1, y: 3 },
       ];
       const board = generateInitialBoard();
       const boardBuffer = board.flat();
-      expect(getAdjacentTiles(boardBuffer, { x: 0, y: 3 })).toEqual(
-        expectedAdjacentTiles
+      expect(getAdjacentSpaces(boardBuffer, { x: 0, y: 3 })).toEqual(
+        expectedAdjacentSpaces
       );
     });
+  });
+
+  // test getting all adjacent matches for given tile on board,
+  // given the board, a tile, and what matchType to match on
+  describe("getMatches util", () => {
+    it("matching colors - horizontal file", () => {
+      const expectedMatched = [
+        {
+          animal: "seahorse",
+          color: "#53B7DF",
+          id: 27,
+        },
+        {
+          animal: "jellyfish",
+          color: "#53B7DF",
+          id: 26,
+        },
+        {
+          animal: "crab",
+          color: "#53B7DF",
+          id: 25,
+        },
+      ];
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 25; // 53B7DF crab
+      board[3][2].occupyingTile = 26; // 53B7DF jellyfish
+      board[3][1].occupyingTile = 27; // 53B7DF seahorse
+      const boardBuffer = board.flat();
+
+      // @todo remove the need for this occupyingTile => id mapping somehow?
+      // getMatches (as used in other utils assumes a filtered board, ie no null)
+      const boardBufferMappedToIds = boardBuffer
+        .filter((item) => item.occupyingTile)
+        .map((boardItem) => {
+          const { x, y, occupyingTile } = boardItem;
+          return {
+            x,
+            y,
+            id: occupyingTile,
+          };
+        });
+
+      // @todo looks like x and y can be anything... only id matters?
+      expect(
+        getMatches(
+          generateTileSet(),
+          boardBufferMappedToIds,
+          { x: 1, y: 3, id: 27 },
+          "color"
+        )
+      ).toEqual(expectedMatched);
+    });
+
+    // test for vertical file
+    // test for plus shape
+    // test for rectangle shape
+    // test for bizarre shape
   });
 
   describe("getScoreForMatches util", () => {
@@ -241,6 +299,10 @@ describe("util functions", () => {
 
     it("gets correct score for each potential match count", () => {
       expect(matchCounts.map(getScoreForMatches)).toEqual(expectedScores);
+    });
+
+    it("gets score of zero for invalid input", () => {
+      expect(getScoreForMatches("hello")).toEqual(0);
     });
   });
 });
