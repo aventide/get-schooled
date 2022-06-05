@@ -97,61 +97,86 @@ export function calculateScore(board, matchType) {
 export function getMatchGroups(board, matchType) {
   const boardCopy = JSON.parse(JSON.stringify(board));
   const matchGroups = [];
-  let filteredBoard = boardCopy
+  let boardBuffer = boardCopy
     .flat()
-    .filter((item) => item.occupyingTile)
-    .map((item) => {
-      const { x, y, occupyingTile } = item;
-      return {
-        x,
-        y,
-        id: occupyingTile,
-      };
-    });
+    .filter((boardItem) => boardItem.occupyingTile);
 
-  while (filteredBoard.length > 0) {
-    const tileToEval = filteredBoard[0];
-    const matches = getMatches(filteredBoard, tileToEval, matchType);
+  while (boardBuffer.length > 0) {
+    const tileToEval = tileSet[boardBuffer[0].occupyingTile];
+    const matches = getMatches(boardBuffer, tileToEval, matchType);
     matchGroups.push(matches);
-    filteredBoard = filteredBoard.filter(
-      (boardItem) => !matches.some((item) => item.id === boardItem.id)
+    // remove board item which contains ids of match group just discovered
+    boardBuffer = boardBuffer.filter(
+      (boardSpace) =>
+        !matches.some((item) => item.id === boardSpace.occupyingTile)
     );
   }
 
   return matchGroups;
 }
 
-// get adjacent tiles within the board for a given tile
-// check up, down, left, right
-export function getAdjacentSpaces(board, tile) {
+// given a space on the board, get adjacent existing spaces
+export function getAdjacentSpaces(board, boardSpace) {
   const upCheck = board.find(
-    (boardTile) => boardTile.x === tile.x && boardTile.y === tile.y - 1
+    (toCheck) => toCheck.x === boardSpace.x && toCheck.y === boardSpace.y - 1
   );
   const downCheck = board.find(
-    (boardTile) => boardTile.x === tile.x && boardTile.y === tile.y + 1
+    (toCheck) => toCheck.x === boardSpace.x && toCheck.y === boardSpace.y + 1
   );
   const leftCheck = board.find(
-    (boardTile) => boardTile.x === tile.x - 1 && boardTile.y === tile.y
+    (toCheck) => toCheck.x === boardSpace.x - 1 && toCheck.y === boardSpace.y
   );
   const rightCheck = board.find(
-    (boardTile) => boardTile.x === tile.x + 1 && boardTile.y === tile.y
+    (toCheck) => toCheck.x === boardSpace.x + 1 && toCheck.y === boardSpace.y
   );
 
   return [upCheck, downCheck, leftCheck, rightCheck].filter((exists) => exists);
 }
 
-export function getMatches(board, spot, matchType) {
-  const compare = tileSet[spot.id][matchType];
-  const matchPool = [tileSet[spot.id]];
-  let checkPool = [spot.id];
+// given an existing tile on the board, get adjacent tiles
+export function getAdjacentTiles(board, tile) {
+  const spaceOnBoard = board.find(
+    (toCheck) => toCheck.occupyingTile === tile.id
+  );
+
+  // should we throw an error in a better way?
+  if (!spaceOnBoard) return [];
+
+  const upCheck = board.find(
+    (toCheck) =>
+      toCheck.x === spaceOnBoard.x && toCheck.y === spaceOnBoard.y - 1
+  );
+  const downCheck = board.find(
+    (toCheck) =>
+      toCheck.x === spaceOnBoard.x && toCheck.y === spaceOnBoard.y + 1
+  );
+  const leftCheck = board.find(
+    (toCheck) =>
+      toCheck.x === spaceOnBoard.x - 1 && toCheck.y === spaceOnBoard.y
+  );
+  const rightCheck = board.find(
+    (toCheck) =>
+      toCheck.x === spaceOnBoard.x + 1 && toCheck.y === spaceOnBoard.y
+  );
+
+  // convert located board spaces to tiles
+  return [upCheck, downCheck, leftCheck, rightCheck]
+    .filter((boardSpace) => boardSpace && boardSpace.occupyingTile)
+    .map((boardSpace) => ({
+      x: boardSpace.x,
+      y: boardSpace.y,
+      id: boardSpace.occupyingTile,
+    }));
+}
+
+export function getMatches(board, tile, matchType) {
+  const compare = tileSet[tile.id][matchType];
+  const matchPool = [tileSet[tile.id]];
+  let checkPool = [tile.id];
 
   while (checkPool.length > 0) {
-    const currentCheckItem = checkPool[0];
-    const currentCheckSquare = board.find(
-      (boardItem) => boardItem.id === currentCheckItem
-    );
-
-    const checks = getAdjacentSpaces(board, currentCheckSquare);
+    const currentCheckId = checkPool[0];
+    const checks = getAdjacentTiles(board, tileSet[currentCheckId]);
 
     checks.forEach((check) => {
       if (
@@ -163,7 +188,7 @@ export function getMatches(board, spot, matchType) {
       }
     });
 
-    checkPool = checkPool.filter((entry) => entry !== currentCheckItem);
+    checkPool = checkPool.filter((entry) => entry !== currentCheckId);
   }
 
   return matchPool;

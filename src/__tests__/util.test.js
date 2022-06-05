@@ -263,23 +263,10 @@ describe("util functions", () => {
       board[3][1].occupyingTile = 27; // 53B7DF seahorse
       const boardBuffer = board.flat();
 
-      // @todo remove the need for this occupyingTile => id mapping somehow?
-      // getMatches (as used in other utils assumes a filtered board, ie no null)
-      const boardBufferMappedToIds = boardBuffer
-        .filter((item) => item.occupyingTile)
-        .map((boardItem) => {
-          const { x, y, occupyingTile } = boardItem;
-          return {
-            x,
-            y,
-            id: occupyingTile,
-          };
-        });
-
       // @todo looks like x and y can be anything... only id matters?
-      expect(
-        getMatches(boardBufferMappedToIds, { x: 1, y: 3, id: 27 }, "color")
-      ).toEqual(expectedMatched);
+      expect(getMatches(boardBuffer, { x: 1, y: 3, id: 27 }, "color")).toEqual(
+        expectedMatched
+      );
     });
 
     // test for vertical file
@@ -287,6 +274,10 @@ describe("util functions", () => {
     // test for rectangle shape
     // test for bizarre shape
   });
+
+  // describe("getMatchGroups util", () => {
+
+  // });
 
   describe("getScoreForMatches util", () => {
     const matchCounts = [0, 1, 2, 3, 4, 5, 6];
