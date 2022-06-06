@@ -85,6 +85,7 @@ export function getLegalMoveSpaces(board, boardSpace) {
   return legalMoves;
 }
 
+// @todo refactor so calculateScore only takes the board buffer. board should probably not exist in this context?
 export function calculateScore(board, matchType) {
   const matchGroups = getMatchGroups(board, matchType);
   return matchGroups.reduce(

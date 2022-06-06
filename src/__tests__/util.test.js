@@ -6,6 +6,7 @@ import {
   getMatches,
   getMatchGroups,
   getLegalMoveSpaces,
+  calculateScore,
 } from "../util";
 
 describe("util functions", () => {
@@ -307,53 +308,76 @@ describe("util functions", () => {
   describe("getLegalMoveSpaces util", () => {
     const expectedLegalMoveSpaces = [
       {
-        "x": 3,
-        "y": 2,
+        x: 3,
+        y: 2,
       },
       {
-        "x": 3,
-        "y": 1,
+        x: 3,
+        y: 1,
       },
       {
-        "x": 3,
-        "y": 0,
+        x: 3,
+        y: 0,
       },
       {
-        "x": 3,
-        "y": 4,
+        x: 3,
+        y: 4,
       },
       {
-        "x": 3,
-        "y": 5,
+        x: 3,
+        y: 5,
       },
       {
-        "x": 4,
-        "y": 3,
+        x: 4,
+        y: 3,
       },
       {
-        "x": 5,
-        "y": 3,
+        x: 5,
+        y: 3,
       },
       {
-        "x": 2,
-        "y": 3,
+        x: 2,
+        y: 3,
       },
       {
-        "x": 1,
-        "y": 3,
+        x: 1,
+        y: 3,
       },
       {
-        "x": 0,
-        "y": 3,
+        x: 0,
+        y: 3,
       },
     ];
     it("gets correct legal move spaces - single tile in board center", () => {
       const board = generateInitialBoard();
       board[3][3].occupyingTile = 22;
 
-      expect(getLegalMoveSpaces(board, board[3][3])).toEqual(expectedLegalMoveSpaces);
-    })
-  })
+      expect(getLegalMoveSpaces(board, board[3][3])).toEqual(
+        expectedLegalMoveSpaces
+      );
+    });
+  });
+
+  describe("calculateScore util", () => {
+    it("calculates correct score - single group of 4 colors", () => {
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 1; // #EAB6BD crab
+      board[3][4].occupyingTile = 2; // #EAB6BD jellyfish
+      board[4][3].occupyingTile = 3; // #EAB6BD seahorse
+      board[4][4].occupyingTile = 4; // #EAB6BD starfish
+
+      expect(calculateScore(board, "color")).toEqual(6);
+    });
+    it("calculates correct score - two groups of 2 different colors", () => {
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 1; // #EAB6BD crab
+      board[3][4].occupyingTile = 2; // #EAB6BD jellyfish
+      board[4][3].occupyingTile = 7; // #D96E6C crab
+      board[4][4].occupyingTile = 8; // #D96E6C jellyfish
+
+      expect(calculateScore(board, "color")).toEqual(2);
+    });
+  });
 
   describe("getScoreForMatches util", () => {
     const matchCounts = [0, 1, 2, 3, 4, 5, 6];
