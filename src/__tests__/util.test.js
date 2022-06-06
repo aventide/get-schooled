@@ -5,6 +5,7 @@ import {
   generateInitialBoard,
   getMatches,
   getMatchGroups,
+  getLegalMoveSpaces,
 } from "../util";
 
 describe("util functions", () => {
@@ -302,6 +303,57 @@ describe("util functions", () => {
       );
     });
   });
+
+  describe("getLegalMoveSpaces util", () => {
+    const expectedLegalMoveSpaces = [
+      {
+        "x": 3,
+        "y": 2,
+      },
+      {
+        "x": 3,
+        "y": 1,
+      },
+      {
+        "x": 3,
+        "y": 0,
+      },
+      {
+        "x": 3,
+        "y": 4,
+      },
+      {
+        "x": 3,
+        "y": 5,
+      },
+      {
+        "x": 4,
+        "y": 3,
+      },
+      {
+        "x": 5,
+        "y": 3,
+      },
+      {
+        "x": 2,
+        "y": 3,
+      },
+      {
+        "x": 1,
+        "y": 3,
+      },
+      {
+        "x": 0,
+        "y": 3,
+      },
+    ];
+    it("gets correct legal move spaces - single tile in board center", () => {
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 22;
+
+      expect(getLegalMoveSpaces(board, board[3][3])).toEqual(expectedLegalMoveSpaces);
+    })
+  })
 
   describe("getScoreForMatches util", () => {
     const matchCounts = [0, 1, 2, 3, 4, 5, 6];

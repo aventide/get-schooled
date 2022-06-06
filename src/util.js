@@ -35,49 +35,49 @@ export function generateInitialBoard() {
   return board;
 }
 
-export function getLegalMoveSpots(board, boardSpot) {
+export function getLegalMoveSpaces(board, boardSpace) {
   const legalMoves = [];
 
   // are there spots above?
-  if (boardSpot.y > 0) {
-    for (let y = boardSpot.y - 1; y >= 0; y--) {
-      if (board[y][boardSpot.x].occupyingTile) {
+  if (boardSpace.y > 0) {
+    for (let y = boardSpace.y - 1; y >= 0; y--) {
+      if (board[y][boardSpace.x].occupyingTile) {
         break;
       } else {
-        legalMoves.push({ x: boardSpot.x, y });
+        legalMoves.push({ x: boardSpace.x, y });
       }
     }
   }
 
   // // are there spots below?
-  if (boardSpot.y < 5) {
-    for (let y = boardSpot.y + 1; y < 6; y++) {
-      if (board[y][boardSpot.x].occupyingTile) {
+  if (boardSpace.y < 5) {
+    for (let y = boardSpace.y + 1; y < 6; y++) {
+      if (board[y][boardSpace.x].occupyingTile) {
         break;
       } else {
-        legalMoves.push({ x: boardSpot.x, y });
+        legalMoves.push({ x: boardSpace.x, y });
       }
     }
   }
 
   // // are there spots to the right?
-  if (boardSpot.x < 5) {
-    for (let x = boardSpot.x + 1; x < 6; x++) {
-      if (board[boardSpot.y][x].occupyingTile) {
+  if (boardSpace.x < 5) {
+    for (let x = boardSpace.x + 1; x < 6; x++) {
+      if (board[boardSpace.y][x].occupyingTile) {
         break;
       } else {
-        legalMoves.push({ x, y: boardSpot.y });
+        legalMoves.push({ x, y: boardSpace.y });
       }
     }
   }
 
   // are there spots to the left?
-  if (boardSpot.x > 0) {
-    for (let x = boardSpot.x - 1; x >= 0; x--) {
-      if (board[boardSpot.y][x].occupyingTile) {
+  if (boardSpace.x > 0) {
+    for (let x = boardSpace.x - 1; x >= 0; x--) {
+      if (board[boardSpace.y][x].occupyingTile) {
         break;
       } else {
-        legalMoves.push({ x, y: boardSpot.y });
+        legalMoves.push({ x, y: boardSpace.y });
       }
     }
   }

@@ -7,7 +7,7 @@ import BoardFooter from "../components/BoardFooter";
 import {
   generateInitialBoard,
   generateTileSet,
-  getLegalMoveSpots,
+  getLegalMoveSpaces,
   calculateScore,
 } from "../util";
 
@@ -172,7 +172,7 @@ function GameBoard({ onBack, onTurnTransition }) {
         .find((item) => item.occupyingTile === id);
       if (boardTargetTile) {
         setIsMoving(true);
-        setLegalMoveSpots(getLegalMoveSpots(board, boardTargetTile));
+        setLegalMoveSpots(getLegalMoveSpaces(board, boardTargetTile));
       }
       setTargetTile(id);
     }
