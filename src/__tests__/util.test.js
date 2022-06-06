@@ -4,6 +4,7 @@ import {
   generateTileSet,
   generateInitialBoard,
   getMatches,
+  getMatchGroups,
 } from "../util";
 
 describe("util functions", () => {
@@ -275,9 +276,46 @@ describe("util functions", () => {
     // test for bizarre shape
   });
 
-  // describe("getMatchGroups util", () => {
+  describe("getMatchGroups util", () => {
+    const tileSet = generateTileSet();
 
-  // });
+    it("matching animals - two groups of different animals that are touching", () => {
+      const expectedMatchGroups = [
+        [tileSet["17"], tileSet["11"]],
+        [tileSet["16"], tileSet["10"], tileSet["4"]],
+      ];
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 4; // starfish
+      board[3][2].occupyingTile = 10; // starfish
+      board[3][1].occupyingTile = 16; // starfish
+
+      board[2][2].occupyingTile = 11; // turtle
+      board[2][1].occupyingTile = 17; // turtle
+      const boardBuffer = board.flat();
+
+      expect(getMatchGroups(boardBuffer, "animal")).toEqual(
+        expectedMatchGroups
+      );
+    });
+    it("matching animals - two groups of same animals that are not touching", () => {
+      const expectedMatchGroups = [
+        [tileSet["16"], tileSet["10"], tileSet["4"]],
+        [tileSet["22"], tileSet["28"]],
+      ];
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 4; // starfish
+      board[3][2].occupyingTile = 10; // starfish
+      board[3][1].occupyingTile = 16; // starfish
+
+      board[4][4].occupyingTile = 22; // starfish
+      board[4][5].occupyingTile = 28; // starfish
+      const boardBuffer = board.flat();
+
+      expect(getMatchGroups(boardBuffer, "animal")).toEqual(
+        expectedMatchGroups
+      );
+    });
+  });
 
   describe("getScoreForMatches util", () => {
     const matchCounts = [0, 1, 2, 3, 4, 5, 6];
