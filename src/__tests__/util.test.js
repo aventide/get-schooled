@@ -240,24 +240,10 @@ describe("util functions", () => {
   // test getting all adjacent matches for given tile on board,
   // given the board, a tile, and what matchType to match on
   describe("getMatches util", () => {
+    const tileSet = generateTileSet();
+
     it("matching colors - horizontal file", () => {
-      const expectedMatched = [
-        {
-          animal: "seahorse",
-          color: "#53B7DF",
-          id: 27,
-        },
-        {
-          animal: "jellyfish",
-          color: "#53B7DF",
-          id: 26,
-        },
-        {
-          animal: "crab",
-          color: "#53B7DF",
-          id: 25,
-        },
-      ];
+      const expectedMatched = [tileSet["27"], tileSet["26"], tileSet["25"]];
       const board = generateInitialBoard();
       board[3][3].occupyingTile = 25; // 53B7DF crab
       board[3][2].occupyingTile = 26; // 53B7DF jellyfish
