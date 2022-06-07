@@ -195,6 +195,28 @@ export function getMatches(board, tile, matchType) {
   return matchPool;
 }
 
+// called tileGroup because it may not necessarily be a matchGroup...
+export function getSpacesAroundGroup(board, tileGroup) {
+  // there will be duplicates of spaces found - conwider biases vs using Set
+  const spacesAroundGroup = [];
+  tileGroup.forEach((tile) => {
+    const spaceContainingTile = board.find(
+      (toCheck) => toCheck.occupyingTile === tile.id
+    );
+
+    const adjacentSpaces = getAdjacentSpaces(board, spaceContainingTile);
+
+    // look at all the tiles, add the ones that are empty, don't add ones that are not.
+    adjacentSpaces.forEach((space) => {
+      if (!space.occupyingTile) {
+        spacesAroundGroup.push(space);
+      }
+    });
+  });
+
+  return spacesAroundGroup;
+}
+
 export function getScoreForMatches(numberOfMatches) {
   switch (numberOfMatches) {
     case 0:

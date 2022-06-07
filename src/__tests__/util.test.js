@@ -7,6 +7,7 @@ import {
   getMatchGroups,
   getLegalMoveSpaces,
   calculateScore,
+  getSpacesAroundGroup,
 } from "../util";
 
 describe("util functions", () => {
@@ -376,6 +377,57 @@ describe("util functions", () => {
       board[4][4].occupyingTile = 8; // #D96E6C jellyfish
 
       expect(calculateScore(board, "color")).toEqual(2);
+    });
+  });
+
+  describe("getSpacesAroundGroup util", () => {
+    it("gets correct spaces in periphery of a group", () => {
+      const expectedPeripheralSpaces = [
+        {
+          x: 3,
+          y: 2,
+        },
+        {
+          x: 2,
+          y: 3,
+        },
+        {
+          x: 3,
+          y: 5,
+        },
+        {
+          x: 2,
+          y: 4,
+        },
+        {
+          x: 4,
+          y: 4,
+        },
+        {
+          x: 4,
+          y: 2,
+        },
+        {
+          x: 4,
+          y: 4,
+        },
+        {
+          x: 5,
+          y: 3,
+        },
+      ];
+
+      const board = generateInitialBoard();
+      board[3][3].occupyingTile = 1; // #EAB6BD crab
+      board[3][4].occupyingTile = 2; // #EAB6BD jellyfish
+      board[4][3].occupyingTile = 3; // #EAB6BD seahorse
+      const boardBuffer = board.flat();
+
+      const group = getMatchGroups(boardBuffer, "color")[0];
+
+      expect(getSpacesAroundGroup(boardBuffer, group)).toEqual(
+        expectedPeripheralSpaces
+      );
     });
   });
 
