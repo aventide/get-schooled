@@ -70,7 +70,6 @@ export default function transition_very_easy({ board, bank, turnFor }) {
 
     if (!largestBMG || !largestBMG.length) {
       // here we would revert to using random placement
-      alert();
       const randomSpot = getRandomEmptySpot(boardBuffer);
       newBoard[randomSpot.y][randomSpot.x].occupyingTile = targetBankTile.id;
     } else {
