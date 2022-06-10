@@ -4,7 +4,7 @@ import SoloSelectScreen from "./containers/SoloSelectScreen";
 import MenuButton from "./components/MenuButton";
 import { getTransitionByDifficulty } from "./transitions/util";
 
-import { DIFFICULTY_IGNORAMUS } from "./constants";
+import { DIFFICULTY_IGNORAMUS, MATCH_ANIMALS, MATCH_COLORS } from "./constants";
 
 const MAIN_MENU = "main_menu";
 const SOLO = "solo";
@@ -14,17 +14,27 @@ const TABLETOP = "tabletop";
 
 export default function App() {
   const [gameScreen, setGameScreen] = useState(MAIN_MENU);
+  const [initialTurnFor, setInitialTurnFor] = useState(MATCH_ANIMALS);
   const [soloDifficulty, setSoloDifficulty] = useState(DIFFICULTY_IGNORAMUS);
+
+  function handleReturnToMain() {
+    setGameScreen(MAIN_MENU);
+    setInitialTurnFor(MATCH_ANIMALS);
+  }
 
   return (
     <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center">
       {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
       {gameScreen === TABLETOP && (
-        <GameBoard onBack={() => setGameScreen(MAIN_MENU)} />
+        <GameBoard
+          initialTurnFor={Math.random() < 0.5 ? MATCH_ANIMALS : MATCH_COLORS}
+          onBack={() => setGameScreen(MAIN_MENU)}
+        />
       )}
       {gameScreen === SOLO_SELECT && (
         <SoloSelectScreen
-          onBack={() => setGameScreen(MAIN_MENU)}
+          onBack={handleReturnToMain}
+          onSelectMatchType={(matchType) => setInitialTurnFor(matchType)}
           onSelectDifficulty={(gameDifficulty) => {
             setSoloDifficulty(gameDifficulty);
             setGameScreen(SOLO);
@@ -33,7 +43,8 @@ export default function App() {
       )}
       {gameScreen === SOLO && (
         <GameBoard
-          onBack={() => setGameScreen(MAIN_MENU)}
+          onBack={handleReturnToMain}
+          initialTurnFor={initialTurnFor}
           onTurnTransition={({ board, bank, turnFor }) => {
             return getTransitionByDifficulty(soloDifficulty)({
               board,

@@ -21,7 +21,7 @@ import BankTile from "../components/BankTile";
 // @todo honestly make this global. It only gets generated once and it's static.
 const tileSet = generateTileSet();
 
-function GameBoard({ onBack, onTurnTransition }) {
+function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
@@ -40,9 +40,7 @@ function GameBoard({ onBack, onTurnTransition }) {
     isConfirmMovesMode: true,
   });
 
-  const [turnFor, setTurnFor] = useState(
-    Math.random() < 0.5 ? "animals" : "colors"
-  );
+  const [turnFor, setTurnFor] = useState(initialTurnFor);
 
   const [actionSequence, setActionSequence] = useState([
     {

@@ -6,8 +6,17 @@ import SelectionButton from "../components/SelectionButton";
 import { MATCH_ANIMALS, MATCH_COLORS } from "../constants";
 import { DIFFICULTY_IGNORAMUS, DIFFICULTY_VERY_EASY } from "../constants";
 
-export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
+export default function SoloSelectScreen({
+  onBack,
+  onSelectMatchType,
+  onSelectDifficulty,
+}) {
   const [matchSelection, setMatchSelection] = useState(MATCH_ANIMALS);
+
+  function handleMatchTypeSelect(matchType) {
+    onSelectMatchType(matchType);
+    setMatchSelection(matchType);
+  }
 
   return (
     <div
@@ -44,12 +53,12 @@ export default function SoloSelectScreen({ onBack, onSelectDifficulty }) {
           <div className="btn-group flex justify-evenly mb-5">
             <SelectionButton
               text="Animals"
-              onClick={() => setMatchSelection(MATCH_ANIMALS)}
+              onClick={() => handleMatchTypeSelect(MATCH_ANIMALS)}
               selected={matchSelection === MATCH_ANIMALS}
             />
             <SelectionButton
               text="Colors"
-              onClick={() => setMatchSelection(MATCH_COLORS)}
+              onClick={() => handleMatchTypeSelect(MATCH_COLORS)}
               selected={matchSelection === MATCH_COLORS}
             />
           </div>

@@ -23,5 +23,5 @@ export const DIFFICULTY_VERY_EASY = "very_easy";
 
 // match selections
 
-export const MATCH_ANIMALS = "match_animals";
-export const MATCH_COLORS = "match_colors";
+export const MATCH_ANIMALS = "animals";
+export const MATCH_COLORS = "colors";
