@@ -21,7 +21,7 @@ import BankTile from "../components/BankTile";
 // @todo honestly make this global. It only gets generated once and it's static.
 const tileSet = generateTileSet();
 
-function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
+function GameBoard({ initialTurnFor, onBack, onTransition }) {
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
@@ -30,6 +30,7 @@ function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
   const [bank, setBank] = useState(shuffle(Object.values(tileSet)));
   const [availableBank, setAvailableBank] = useState([]);
   const [legalMoveSpots, setLegalMoveSpots] = useState([]);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [scores, setScores] = useState({
     color: 0,
     animal: 0,
@@ -41,7 +42,6 @@ function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
   });
 
   const [turnFor, setTurnFor] = useState(initialTurnFor);
-
   const [actionSequence, setActionSequence] = useState([
     {
       board,
@@ -73,9 +73,10 @@ function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
     setTurnFor(nextTurnFor);
     setHasMoved(false);
     setHasPlaced(false);
-    if (onTurnTransition) {
+    if (onTransition) {
+      setIsTransitioning(true);
       setTimeout(() => {
-        const { newBoard, newBank, newTurnFor } = onTurnTransition({
+        const { newBoard, newBank, newTurnFor } = onTransition({
           board,
           bank,
           turnFor: nextTurnFor,
@@ -87,6 +88,7 @@ function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
           ...actionSequence,
           { board: newBoard, bank: newBank, turnFor: newTurnFor },
         ]);
+        setIsTransitioning(false);
       }, 1000);
     }
   }
@@ -205,11 +207,9 @@ function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
       />
 
       <div
-        className={`mt-4 w-full ${
-          isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
-        } border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${
-          isTableTopMode ? "gap-2" : "gap-1"
-        }`}
+        className={`mt-4 w-full border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${
+          isTableTopMode ? "md:w-4/5 gap-2" : "md:w-3/5 lg:w-2/5 gap-1"
+        } ${isTransitioning ? "pointer-events-none" : "pointer-events-auto"}`}
       >
         {board.flat().map((boardTile) => {
           const isLegalMoveTile = legalMoveSpots.find(
@@ -265,9 +265,15 @@ function GameBoard({ initialTurnFor, onBack, onTurnTransition }) {
         } flex-1`}
       >
         <div
-          className={`w-full border-8 border-blue-300 rounded-md bg-blue-300 cursor-pointer`}
+          className={`w-full border-8 border-blue-300 rounded-md bg-blue-300`}
         >
-          <div className="grid grid-cols-6 grid-rows-1 gap-1">
+          <div
+            className={`grid grid-cols-6 grid-rows-1 gap-1 ${
+              isTransitioning
+                ? "pointer-events-none cursor-pointer"
+                : "pointer-events-auto cursor-pointer"
+            }`}
+          >
             {availableBank.map((abItem, abIndex) => (
               <div
                 className={

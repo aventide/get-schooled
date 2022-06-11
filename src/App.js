@@ -45,7 +45,7 @@ export default function App() {
         <GameBoard
           onBack={handleReturnToMain}
           initialTurnFor={initialTurnFor}
-          onTurnTransition={({ board, bank, turnFor }) => {
+          onTransition={({ board, bank, turnFor }) => {
             return getTransitionByDifficulty(soloDifficulty)({
               board,
               bank,
