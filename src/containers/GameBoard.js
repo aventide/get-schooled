@@ -37,7 +37,6 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
   });
 
   const [boardSettings, setBoardSettings] = useState({
-    isTableTopMode: false,
     isConfirmMovesMode: true,
   });
 
@@ -195,21 +194,14 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
     setActionSequence(newActionSequence);
   }
 
-  const { isTableTopMode } = boardSettings;
-
   return (
     <>
-      <BoardHeader
-        isTableTopMode={isTableTopMode}
-        scores={scores}
-        turnFor={turnFor}
-        onBack={onBack}
-      />
+      <BoardHeader scores={scores} turnFor={turnFor} onBack={onBack} />
 
       <div
-        className={`mt-4 w-full border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer ${
-          isTableTopMode ? "md:w-4/5 gap-2" : "md:w-3/5 lg:w-2/5 gap-1"
-        } ${isTransitioning ? "pointer-events-none" : "pointer-events-auto"}`}
+        className={`mt-4 w-full md:w-4/5 lg:w-3/5 border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1 ${
+          isTransitioning ? "pointer-events-none" : "pointer-events-auto"
+        }`}
       >
         {board.flat().map((boardTile) => {
           const isLegalMoveTile = legalMoveSpots.find(
@@ -260,9 +252,7 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
       </div>
 
       <div
-        className={`mt-4 flex flex-row justify-center w-full ${
-          isTableTopMode ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
-        } flex-1`}
+        className={`mt-4 flex flex-row justify-center w-full md:w-4/5 lg:w-3/5 flex-1`}
       >
         <div
           className={`w-full border-8 border-blue-300 rounded-md bg-blue-300`}

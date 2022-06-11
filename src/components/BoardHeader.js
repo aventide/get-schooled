@@ -2,19 +2,12 @@ import StyledModal from "./StyledModal";
 import MenuButton from "./MenuButton";
 import { useState } from "react";
 
-export default function BoardHeader({
-  isTableTopMode,
-  scores,
-  turnFor,
-  onBack,
-}) {
+export default function BoardHeader({ scores, turnFor, onBack }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div
-      className={`w-full ${
-        isTableTopMode ? "" : "md:w-3/5 lg:w-2/5"
-      } bg-blue-600 flex justify-evenly text-white font-sspRegular`}
+      className={`w-full bg-blue-600 flex justify-evenly text-white font-sspRegular`}
     >
       <div className="flex items-center pl-2 py-2">
         <button

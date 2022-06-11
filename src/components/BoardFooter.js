@@ -130,25 +130,6 @@ export default function BoardFooter({
             }
           />
         </div>
-        <div className="flex justify-between text-blue-400 w-full my-4">
-          <div>
-            <p className="font-sspRegular font-bold">Tablet Mode</p>
-            <p className="text-xs text-black">
-              Use the full width of a touch screen
-            </p>
-          </div>
-          <input
-            type="checkbox"
-            class="toggle toggle-primary cursor-pointer bg-gray-400 border-gray-400 opacity-75"
-            checked={settings?.isTableTopMode}
-            onChange={() =>
-              onSettingsChanged({
-                ...settings,
-                isTableTopMode: !settings.isTableTopMode,
-              })
-            }
-          />
-        </div>
       </StyledModal>
     </div>
   );

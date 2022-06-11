@@ -20,9 +20,7 @@ export default function SoloSelectScreen({
 
   return (
     <div
-      className={`w-full h-screen ${
-        false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
-      } bg-blue-300 flex flex-col`}
+      className={`w-full h-screen md:w-3/5 lg:w-2/5 bg-blue-300 flex flex-col`}
     >
       <div className="m-2 text-white flex items-center">
         <button onClick={onBack} className="bg-blue-500 rounded-md">

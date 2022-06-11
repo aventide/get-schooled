@@ -109,9 +109,7 @@ function Version({ number }) {
 function MainMenu({ onScreenSet }) {
   return (
     <div
-      className={`w-full h-screen ${
-        false ? "md:w-4/5" : "md:w-3/5 lg:w-2/5"
-      } bg-blue-300 flex flex-col`}
+      className={`w-full h-screen md:w-4/5 lg:w-2/5 bg-blue-300 flex flex-col`}
     >
       <div className="flex justify-center my-4">
         <span className="font-fancy text-white text-3xl">Get Schooled!</span>
