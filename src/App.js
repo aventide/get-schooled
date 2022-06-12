@@ -23,37 +23,39 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center">
-      {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
-      {gameScreen === TABLETOP && (
-        <GameBoard
-          initialTurnFor={Math.random() < 0.5 ? MATCH_ANIMALS : MATCH_COLORS}
-          onBack={() => setGameScreen(MAIN_MENU)}
-        />
-      )}
-      {gameScreen === SOLO_SELECT && (
-        <SoloSelectScreen
-          onBack={handleReturnToMain}
-          onSelectMatchType={(matchType) => setInitialTurnFor(matchType)}
-          onSelectDifficulty={(gameDifficulty) => {
-            setSoloDifficulty(gameDifficulty);
-            setGameScreen(SOLO);
-          }}
-        />
-      )}
-      {gameScreen === SOLO && (
-        <GameBoard
-          onBack={handleReturnToMain}
-          initialTurnFor={initialTurnFor}
-          onTransition={({ board, bank, turnFor }) => {
-            return getTransitionByDifficulty(soloDifficulty)({
-              board,
-              bank,
-              turnFor,
-            });
-          }}
-        />
-      )}
+    <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center justify-center">
+      <div className="h-full w-full md:w-4/5 lg:w-3/5 xl:w-2/5">
+        {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
+        {gameScreen === TABLETOP && (
+          <GameBoard
+            initialTurnFor={Math.random() < 0.5 ? MATCH_ANIMALS : MATCH_COLORS}
+            onBack={() => setGameScreen(MAIN_MENU)}
+          />
+        )}
+        {gameScreen === SOLO_SELECT && (
+          <SoloSelectScreen
+            onBack={handleReturnToMain}
+            onSelectMatchType={(matchType) => setInitialTurnFor(matchType)}
+            onSelectDifficulty={(gameDifficulty) => {
+              setSoloDifficulty(gameDifficulty);
+              setGameScreen(SOLO);
+            }}
+          />
+        )}
+        {gameScreen === SOLO && (
+          <GameBoard
+            onBack={handleReturnToMain}
+            initialTurnFor={initialTurnFor}
+            onTransition={({ board, bank, turnFor }) => {
+              return getTransitionByDifficulty(soloDifficulty)({
+                board,
+                bank,
+                turnFor,
+              });
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -108,9 +110,7 @@ function Version({ number }) {
 
 function MainMenu({ onScreenSet }) {
   return (
-    <div
-      className={`w-full h-screen md:w-4/5 lg:w-2/5 bg-blue-300 flex flex-col`}
-    >
+    <div className={`w-full h-full bg-blue-300 flex flex-col`}>
       <div className="flex justify-center my-4">
         <span className="font-fancy text-white text-3xl">Get Schooled!</span>
       </div>

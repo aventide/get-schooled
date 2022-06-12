@@ -43,9 +43,9 @@ module.exports = {
     screens: {
       'sm': '500px',
       'md': '520px',
-      'lg': '900px',
-      'xl': '1280px',
-      '2xl': '1536px',
+      'lg': '630px',
+      'xl': '850px',
+      '2xl': '1150px',
     }
   },
   plugins: [

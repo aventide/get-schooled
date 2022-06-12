@@ -6,7 +6,7 @@ export default function StyledModal({ isOpen, onClose, title, children }) {
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="In-Game Settings"
-      className="bg-blue-100 fixed inset-8 md:inset-32 lg:inset-72 m-auto p-8 border-blue-400 border-4 rounded-lg h-max"
+      className="bg-blue-100 fixed inset-8 md:inset-24 lg:inset-48 xl:inset-72 2xl:inset-96 m-auto p-8 border-blue-400 border-4 rounded-lg h-max"
     >
       <div className="flex justify-between text-blue-400 w-full mb-12">
         <span className="font-fancy">{title}</span>
