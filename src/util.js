@@ -197,7 +197,7 @@ export function getMatches(board, tile, matchType) {
 
 // called tileGroup because it may not necessarily be a matchGroup...
 export function getSpacesAroundGroup(board, tileGroup) {
-  // there will be duplicates of spaces found - conwider biases vs using Set
+  // there will be duplicates of spaces found - consider biases vs using Set
   const spacesAroundGroup = [];
   tileGroup.forEach((tile) => {
     const spaceContainingTile = board.find(

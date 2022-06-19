@@ -46,6 +46,11 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
       board,
       bank,
       turnFor,
+      highlights: {
+        placedSpace: null,
+        movedFromSpace: null,
+        movedToSpace: null,
+      },
     },
   ]);
 
@@ -75,7 +80,7 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
     if (onTransition) {
       setIsTransitioning(true);
       setTimeout(() => {
-        const { newBoard, newBank, newTurnFor } = onTransition({
+        const { newBoard, newBank, newTurnFor, newHighlights } = onTransition({
           board,
           bank,
           turnFor: nextTurnFor,
@@ -85,7 +90,12 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
         setTurnFor(newTurnFor);
         setActionSequence([
           ...actionSequence,
-          { board: newBoard, bank: newBank, turnFor: newTurnFor },
+          {
+            board: newBoard,
+            bank: newBank,
+            turnFor: newTurnFor,
+            highlights: newHighlights,
+          },
         ]);
         setIsTransitioning(false);
       }, 1000);
@@ -138,9 +148,15 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
       } else {
         setHasMoved(true);
       }
+
+      // careful here, targetTile state is set to null. don't think it matters though
       setActionSequence([
         ...actionSequence,
-        { board: newBoard, bank: newBank, turnFor },
+        {
+          board: newBoard,
+          bank: newBank,
+          turnFor,
+        },
       ]);
     }
   }
@@ -194,6 +210,8 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
     setActionSequence(newActionSequence);
   }
 
+  console.log(actionSequence);
+
   return (
     <>
       <BoardHeader scores={scores} turnFor={turnFor} onBack={onBack} />
@@ -215,6 +233,10 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
               className={`group ${
                 showPlacementDot
                   ? "bg-blue-400"
+                  : boardTile.occupyingTile &&
+                    actionSequence[actionSequence.length - 1]?.highlights
+                      ?.placedSpace?.occupyingTile === boardTile.occupyingTile
+                  ? "bg-yellow-200 animate-pulse-fast animate-once"
                   : boardTile.occupyingTile &&
                     boardTile.occupyingTile === targetTile
                   ? "bg-orange-200"

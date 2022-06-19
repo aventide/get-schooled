@@ -88,5 +88,10 @@ export default function transition_very_easy({ board, bank, turnFor }) {
     newBoard,
     newBank: bank.filter((item) => item.id !== targetBankTile.id),
     newTurnFor: turnFor === "colors" ? "animals" : "colors",
+    newHighlights: {
+      placedSpace: newBoard
+        .flat()
+        .find((toCheck) => toCheck.occupyingTile === targetBankTile.id),
+    },
   };
 }
