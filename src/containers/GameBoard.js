@@ -148,8 +148,6 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
       } else {
         setHasMoved(true);
       }
-
-      // careful here, targetTile state is set to null. don't think it matters though
       setActionSequence([
         ...actionSequence,
         {
@@ -209,8 +207,6 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
     setHasPlaced(false);
     setActionSequence(newActionSequence);
   }
-
-  console.log(actionSequence);
 
   return (
     <>
