@@ -213,7 +213,7 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
       <BoardHeader scores={scores} turnFor={turnFor} onBack={onBack} />
 
       <div
-        className={`mt-4 w-full border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1 ${
+        className={`mt-2 w-full border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1 ${
           isTransitioning ? "pointer-events-none" : "pointer-events-auto"
         }`}
       >
@@ -269,7 +269,7 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
         })}
       </div>
 
-      <div className={`mt-4 flex flex-row justify-center w-full flex-1`}>
+      <div className={`mt-2 flex flex-row justify-center w-full flex-1`}>
         <div
           className={`w-full border-8 border-blue-300 rounded-md bg-blue-300`}
         >
