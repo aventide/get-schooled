@@ -1,5 +1,6 @@
 import { useState } from "react";
 import GameBoard from "./containers/GameBoard";
+import BoardHeader from "./components/BoardHeader";
 import SoloSelectScreen from "./containers/SoloSelectScreen";
 import MenuButton from "./components/MenuButton";
 import { getTransitionByDifficulty } from "./transitions/util";
@@ -14,12 +15,12 @@ const TABLETOP = "tabletop";
 
 export default function App() {
   const [gameScreen, setGameScreen] = useState(MAIN_MENU);
-  const [initialTurnFor, setInitialTurnFor] = useState(MATCH_ANIMALS);
+  const [localPlayer, setLocalPlayer] = useState(MATCH_ANIMALS);
   const [soloDifficulty, setSoloDifficulty] = useState(DIFFICULTY_IGNORAMUS);
 
   function handleReturnToMain() {
     setGameScreen(MAIN_MENU);
-    setInitialTurnFor(MATCH_ANIMALS);
+    setLocalPlayer(MATCH_ANIMALS);
   }
 
   return (
@@ -29,13 +30,16 @@ export default function App() {
         {gameScreen === TABLETOP && (
           <GameBoard
             initialTurnFor={Math.random() < 0.5 ? MATCH_ANIMALS : MATCH_COLORS}
-            onBack={() => setGameScreen(MAIN_MENU)}
+            onBack={handleReturnToMain}
+            BoardHeader={(props) => (
+              <BoardHeader {...props} onBack={handleReturnToMain} />
+            )}
           />
         )}
         {gameScreen === SOLO_SELECT && (
           <SoloSelectScreen
             onBack={handleReturnToMain}
-            onSelectMatchType={(matchType) => setInitialTurnFor(matchType)}
+            onSelectMatchType={(matchType) => setLocalPlayer(matchType)}
             onSelectDifficulty={(gameDifficulty) => {
               setSoloDifficulty(gameDifficulty);
               setGameScreen(SOLO);
@@ -45,7 +49,19 @@ export default function App() {
         {gameScreen === SOLO && (
           <GameBoard
             onBack={handleReturnToMain}
-            initialTurnFor={initialTurnFor}
+            initialTurnFor={Math.random() < 0.5 ? MATCH_ANIMALS : MATCH_COLORS}
+            localPlayer={localPlayer}
+            BoardHeader={(props) => (
+              <BoardHeader
+                {...props}
+                onBack={handleReturnToMain}
+                localPlayer={localPlayer}
+                labels={{
+                  localPlayer: "player",
+                  otherPlayer: "computer",
+                }}
+              />
+            )}
             onTransition={({ board, bank, turnFor }) => {
               return getTransitionByDifficulty(soloDifficulty)({
                 board,

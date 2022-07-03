@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { shuffle, take } from "lodash";
 
-import BoardHeader from "../components/BoardHeader";
 import BoardFooter from "../components/BoardFooter";
 
 import {
@@ -21,7 +20,7 @@ import BankTile from "../components/BankTile";
 // @todo honestly make this global. It only gets generated once and it's static.
 const tileSet = generateTileSet();
 
-function GameBoard({ initialTurnFor, onBack, onTransition }) {
+function GameBoard({ initialTurnFor, localPlayer, onTransition, BoardHeader }) {
   const [board, setBoard] = useState(generateInitialBoard());
   const [targetTile, setTargetTile] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
@@ -67,13 +66,18 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
 
   useEffect(() => {
     if (hasPlaced && !boardSettings.isConfirmMovesMode) {
-      toggleTurnFor();
+      const toggledTurnFor = turnFor === "colors" ? "animals" : "colors";
+      applyTurnChange(toggledTurnFor);
     }
   }, [hasPlaced, boardSettings.isConfirmMovesMode]); // eslint-disable-line
 
-  function toggleTurnFor() {
-    const nextTurnFor = turnFor === "colors" ? "animals" : "colors";
+  useEffect(() => {
+    if (actionSequence.length === 1 && localPlayer !== turnFor) {
+      applyTurnChange(turnFor);
+    }
+  }, [localPlayer, actionSequence]);
 
+  function applyTurnChange(nextTurnFor) {
     setTurnFor(nextTurnFor);
     setHasMoved(false);
     setHasPlaced(false);
@@ -192,7 +196,8 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
   }
 
   function handleConfirmAction() {
-    toggleTurnFor();
+    const nextTurnFor = turnFor === "colors" ? "animals" : "colors";
+    applyTurnChange(nextTurnFor);
   }
 
   function handleCancelAction() {
@@ -210,7 +215,7 @@ function GameBoard({ initialTurnFor, onBack, onTransition }) {
 
   return (
     <>
-      <BoardHeader scores={scores} turnFor={turnFor} onBack={onBack} />
+      <BoardHeader scores={scores} turnFor={turnFor} />
 
       <div
         className={`mt-2 w-full border-8 border-blue-300 rounded-md bg-blue-300 grid grid-cols-6 grid-rows-6 cursor-pointer gap-1 ${

@@ -2,8 +2,27 @@ import StyledModal from "./StyledModal";
 import MenuButton from "./MenuButton";
 import { useState } from "react";
 
-export default function BoardHeader({ scores, turnFor, onBack }) {
+export default function BoardHeader({
+  scores,
+  turnFor,
+  localPlayer,
+  onBack,
+  labels = {
+    localPlayer: "player",
+    otherPlayer: "player",
+  },
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function getPlayerLabel(matchType) {
+    if (localPlayer) {
+      return matchType === localPlayer
+        ? labels.localPlayer
+        : labels.otherPlayer;
+    } else {
+      return null;
+    }
+  }
 
   function ColorPlayerInfo() {
     return (
@@ -17,7 +36,7 @@ export default function BoardHeader({ scores, turnFor, onBack }) {
           <span className="text-base text-ellipsis overflow-hidden whitespace-nowrap">
             Colors
           </span>
-          <span className="text-2xs leading-3">Player</span>
+          <span className="text-2xs leading-3">{getPlayerLabel("colors")}</span>
         </div>
       </div>
     );
@@ -35,7 +54,9 @@ export default function BoardHeader({ scores, turnFor, onBack }) {
           <span className="text-base text-ellipsis overflow-hidden whitespace-nowrap">
             Animals
           </span>
-          <span className="text-2xs leading-3">Player</span>
+          <span className="text-2xs leading-3">
+            {getPlayerLabel("animals")}
+          </span>
         </div>
       </div>
     );
