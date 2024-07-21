@@ -310,7 +310,7 @@ function GameBoard({ initialTurnFor, localPlayer, onTransition, BoardHeader }) {
               </div>
             ))}
           </div>
-          <div className="mt-1 border-t-4 border-blue-200"></div>
+          <div className="mt-1 border-t-4 border-blue-200" />
           <BoardFooter
             bankSize={bank.length}
             settings={boardSettings}
@@ -322,11 +322,6 @@ function GameBoard({ initialTurnFor, localPlayer, onTransition, BoardHeader }) {
           />
         </div>
       </div>
-      {/* <div className="h-20 w-20 fixed translate-x-5 translate-y-screen group-hover:-translate-y-screen ease-linear duration-10000">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="50" />
-        </svg>
-      </div> */}
     </>
   );
 }

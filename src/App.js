@@ -24,7 +24,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen w-screen bg-indigo-100 flex flex-col items-center justify-center">
+    <div className="h-[100dvh] w-screen flex justify-center">
       <div className="h-full w-full md:w-4/5 lg:w-3/5 xl:w-2/5">
         {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
         {gameScreen === TABLETOP && (
@@ -112,7 +112,7 @@ const multiPlayerIcon = (
 
 function Version({ number }) {
   return (
-    <div className="my-4 flex justify-center font-fancy text-white">
+    <div className="my-8 flex justify-center items-end font-fancy text-white row-span-1">
       <a
         href="https://github.com/misterlocations/get-schooled"
         className="underline underline-offset-2 decoration-4
@@ -126,24 +126,27 @@ function Version({ number }) {
 
 function MainMenu({ onScreenSet }) {
   return (
-    <div className={`w-full h-full bg-blue-300 flex flex-col`}>
-      <div className="flex justify-center my-4">
-        <span className="font-fancy text-white text-3xl">Get Schooled!</span>
+    <div className={`w-full h-full bg-blue-300`}>
+      <div className="grid grid-cols-1 grid-rows-6 h-full">
+        <div className="flex flex-col justify-center items-center row-span-3">
+          <span className="font-fancy text-white text-4xl">Get</span>
+          <span className="font-fancy text-white text-4xl">Schooled</span>
+        </div>
+        <div className="mx-8 flex flex-col justify-center row-span-2">
+          <MenuButton
+            text="solo"
+            icon={singlePlayerIcon}
+            onClick={() => onScreenSet(SOLO_SELECT)}
+          />
+          <MenuButton text="online" icon={multiPlayerIcon} disabled />
+          <MenuButton
+            text="tabletop"
+            icon={multiPlayerIcon}
+            onClick={() => onScreenSet(TABLETOP)}
+          />
+        </div>
+        <Version number="0.1.0" />
       </div>
-      <div className="mx-8 h-full flex flex-col justify-center">
-        <MenuButton
-          text="solo"
-          icon={singlePlayerIcon}
-          onClick={() => onScreenSet(SOLO_SELECT)}
-        />
-        <MenuButton text="online" icon={multiPlayerIcon} disabled />
-        <MenuButton
-          text="tabletop"
-          icon={multiPlayerIcon}
-          onClick={() => onScreenSet(TABLETOP)}
-        />
-      </div>
-      <Version number="0.1.0" />
     </div>
   );
 }
