@@ -25,7 +25,7 @@ export default function App() {
 
   return (
     <div className="h-[100dvh] w-screen flex justify-center">
-      <div className="h-full w-full md:w-4/5 lg:w-3/5 xl:w-2/5">
+      <div className="h-full w-full md:w-[500px]">
         {gameScreen === MAIN_MENU && <MainMenu onScreenSet={setGameScreen} />}
         {gameScreen === TABLETOP && (
           <GameBoard
